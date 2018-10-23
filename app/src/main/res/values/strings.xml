@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">GitHubSample</string>
+
+    <!-- Commons Messages -->
+    <string name="msg_loading">Loading…</string>
+    <string name="msg_empty_list">List is empty</string>
+
+    <!-- Common Errors -->
+    <string name="error_unknown">Unknown error</string>
+    <string name="error_server">Server error</string>
+    <string name="error_network">Network error</string>
+
+    <!-- Users -->
+    <string name="users_title">Users</string>
+
+    <!-- User Details -->
+    <string name="user_details_login">Login:</string>
+    <string name="user_details_name">Name:</string>
+    <string name="user_details_location">Location:</string>
+    <string name="user_details_public_repos">Public repos:</string>
+    <string name="user_details_followers">Followers:</string>
+    <string name="user_details_following">Following:</string>
+</resources>
