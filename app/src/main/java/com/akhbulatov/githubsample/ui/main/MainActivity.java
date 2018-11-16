@@ -1,15 +1,17 @@
 package com.akhbulatov.githubsample.ui.main;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
 import com.akhbulatov.githubsample.R;
 import com.akhbulatov.githubsample.models.User;
+import com.akhbulatov.githubsample.ui.main.favoritesroot.FavoritesRootActivity;
 import com.akhbulatov.githubsample.ui.main.userdetailsroot.UserDetailsRootActivity;
 import com.akhbulatov.githubsample.ui.main.users.UsersFragment;
 
-public class MainActivity extends AppCompatActivity implements UsersFragment.UsersListener {
+public final class MainActivity extends AppCompatActivity implements UsersFragment.UsersListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +31,15 @@ public class MainActivity extends AppCompatActivity implements UsersFragment.Use
         navigateToUserDetails(user);
     }
 
+    @Override public void onFavoritesClick() {
+        navigateToFavorites();
+    }
+
     private void navigateToUserDetails(@NonNull User user) {
         startActivity(UserDetailsRootActivity.createIntent(this, user.login));
+    }
+
+    private void navigateToFavorites() {
+        startActivity(new Intent(this, FavoritesRootActivity.class));
     }
 }

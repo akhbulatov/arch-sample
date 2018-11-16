@@ -13,14 +13,13 @@ public abstract class BasePresenterImpl<T extends BaseView> implements BasePrese
     @Nullable private T view;
     @NonNull private Set<Call<?>> requestSet = new HashSet<>();
 
-
     @Override public void attachView(@NonNull T view) {
         this.view = view;
     }
 
     @Override public void detachView() {
-        view = null;
         cancelRequests();
+        view = null;
     }
 
     @Nullable protected T getView() {

@@ -13,4 +13,8 @@ public interface DataManager {
     Call<List<User>> getUsers();
 
     Call<UserDetails> getUserDetails(@NonNull String login);
+
+    @NonNull List<UserDetails> getFavorites();
+
+    void addUserToFavorites(@NonNull UserDetails userDetails);
 }

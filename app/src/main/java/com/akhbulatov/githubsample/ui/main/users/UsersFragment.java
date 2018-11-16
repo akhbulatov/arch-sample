@@ -19,7 +19,7 @@ import com.akhbulatov.githubsample.models.User;
 
 import java.util.List;
 
-public class UsersFragment extends Fragment implements UsersView {
+public final class UsersFragment extends Fragment implements UsersView {
 
     private RecyclerView usersRecyclerView;
     private ViewGroup loadingProgressLayout;
@@ -64,9 +64,7 @@ public class UsersFragment extends Fragment implements UsersView {
     }
 
     private void initViews(@NonNull View view) {
-        Toolbar toolbar = view.findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.users_title);
-
+        setupToolbar(view);
         usersRecyclerView = view.findViewById(R.id.usersRecyclerView);
         usersRecyclerView.setLayoutManager(new LinearLayoutManager(usersRecyclerView.getContext()));
         usersRecyclerView.addItemDecoration(new DividerItemDecoration(
@@ -75,6 +73,21 @@ public class UsersFragment extends Fragment implements UsersView {
         );
 
         loadingProgressLayout = view.findViewById(R.id.loadingProgressLayout);
+    }
+
+    private void setupToolbar(@NonNull View view) {
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.users_title);
+        toolbar.inflateMenu(R.menu.users);
+        toolbar.setOnMenuItemClickListener(menuItem -> {
+            switch (menuItem.getItemId()) {
+                case R.id.favoritesMenu:
+                    presenter.onFavoritesClicked();
+                    return true;
+                default:
+                    return false;
+            }
+        });
     }
 
     @Override public void showUsers(@NonNull List<User> users) {
@@ -91,7 +104,13 @@ public class UsersFragment extends Fragment implements UsersView {
         usersListener.onUserClick(user);
     }
 
+    @Override public void navigateToFavorites() {
+        usersListener.onFavoritesClick();
+    }
+
     public interface UsersListener {
         void onUserClick(@NonNull User user);
+
+        void onFavoritesClick();
     }
 }

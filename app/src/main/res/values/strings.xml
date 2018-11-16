@@ -12,6 +12,7 @@
 
     <!-- Users -->
     <string name="users_title">Users</string>
+    <string name="users_favorites">Favorites</string>
 
     <!-- User Details -->
     <string name="user_details_login">Login:</string>
@@ -20,4 +21,9 @@
     <string name="user_details_public_repos">Public repos:</string>
     <string name="user_details_followers">Followers:</string>
     <string name="user_details_following">Following:</string>
+    <string name="user_details_add_to_favorites">Add to Favorites</string>
+    <string name="user_details_added_to_favorites">Added to Favorites</string>
+
+    <!-- Favorites -->
+    <string name="favorites_title">Favorites</string>
 </resources>

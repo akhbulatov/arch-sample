@@ -21,7 +21,6 @@ public final class PrefsFactory {
         return prefsHelper;
     }
 
-
     @NonNull private static PrefsHelper createPrefsHelper(@NonNull Context context) {
         return new PrefsHelper(getSharedPrefs(context));
     }

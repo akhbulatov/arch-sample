@@ -13,4 +13,6 @@ public interface UsersView extends BaseView {
     void showLoadingProgress(boolean show);
 
     void navigateToUserDetails(@NonNull User user);
+
+    void navigateToFavorites();
 }

@@ -10,7 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.akhbulatov.githubsample.R;
 import com.akhbulatov.githubsample.ui.main.userdetailsroot.userdetails.UserDetailsFragment;
 
-public class UserDetailsRootActivity extends AppCompatActivity {
+public final class UserDetailsRootActivity extends AppCompatActivity {
 
     private static final String EXTRA_LOGIN = "login";
 

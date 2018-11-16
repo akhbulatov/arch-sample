@@ -14,9 +14,10 @@ import android.widget.TextView;
 import com.akhbulatov.githubsample.App;
 import com.akhbulatov.githubsample.R;
 import com.akhbulatov.githubsample.models.UserDetails;
+import com.akhbulatov.githubsample.ui.global.utils.CommonUtils;
 import com.squareup.picasso.Picasso;
 
-public class UserDetailsFragment extends Fragment implements UserDetailsView {
+public final class UserDetailsFragment extends Fragment implements UserDetailsView {
 
     private static final String ARGUMENT_USER_LOGIN = "user_login";
 
@@ -32,6 +33,7 @@ public class UserDetailsFragment extends Fragment implements UserDetailsView {
 
     private UserDetailsPresenter presenter;
     private String login;
+    @Nullable private UserDetails userDetails;
 
     public static UserDetailsFragment newInstance(String userLogin) {
         Bundle args = new Bundle();
@@ -91,6 +93,18 @@ public class UserDetailsFragment extends Fragment implements UserDetailsView {
         toolbar.setTitle(login);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white);
         toolbar.setNavigationOnClickListener(v -> presenter.onBackClicked());
+        toolbar.inflateMenu(R.menu.user_details);
+        toolbar.setOnMenuItemClickListener(menuItem -> {
+                    switch (menuItem.getItemId()) {
+                        case R.id.addToFavoritesMenu: {
+                            presenter.onAddToFavoritesClicked(userDetails);
+                            return true;
+                        }
+                        default:
+                            return false;
+                    }
+                }
+        );
     }
 
     @Override public void showContentLayout(boolean show) {
@@ -98,6 +112,8 @@ public class UserDetailsFragment extends Fragment implements UserDetailsView {
     }
 
     @Override public void showUserDetails(@NonNull UserDetails userDetails) {
+        this.userDetails = userDetails;
+
         Picasso.get()
                 .load(userDetails.avatarUrl)
                 .placeholder(R.drawable.img_no_image)
@@ -112,6 +128,10 @@ public class UserDetailsFragment extends Fragment implements UserDetailsView {
 
     @Override public void showLoadingProgress(boolean show) {
         loadingProgressLayout.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
+
+    @Override public void showToFavoritesAdded() {
+        CommonUtils.showToast(getContext(), R.string.user_details_added_to_favorites);
     }
 
     @Override public void backToUser() {

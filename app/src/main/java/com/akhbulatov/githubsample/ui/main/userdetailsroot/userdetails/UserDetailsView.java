@@ -12,5 +12,7 @@ interface UserDetailsView extends BaseView {
 
     void showLoadingProgress(boolean show);
 
+    void showToFavoritesAdded();
+
     void backToUser();
 }

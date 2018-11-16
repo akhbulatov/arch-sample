@@ -65,4 +65,10 @@ public final class UsersPresenter extends BasePresenterImpl<UsersView> {
             getView().navigateToUserDetails(user);
         }
     }
+
+    void onFavoritesClicked() {
+        if (getView() != null) {
+            getView().navigateToFavorites();
+        }
+    }
 }

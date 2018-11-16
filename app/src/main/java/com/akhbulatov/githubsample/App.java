@@ -8,7 +8,7 @@ import com.akhbulatov.githubsample.data.global.factories.DatabaseFactory;
 import com.akhbulatov.githubsample.data.global.factories.NetworkFactory;
 import com.akhbulatov.githubsample.data.global.factories.PrefsFactory;
 
-public class App extends Application {
+public final class App extends Application {
 
     private static DataManager dataManager;
 

@@ -20,6 +20,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.main.userdetailsroot.UserDetailsRootActivity" />
+        <activity android:name=".ui.main.favoritesroot.FavoritesRootActivity" />
     </application>
 
 </manifest>

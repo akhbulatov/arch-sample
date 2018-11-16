@@ -1,28 +1,39 @@
 package com.akhbulatov.githubsample.ui.main.userdetailsroot.userdetails;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.akhbulatov.githubsample.data.global.DataManager;
 import com.akhbulatov.githubsample.models.UserDetails;
 import com.akhbulatov.githubsample.ui.global.BasePresenterImpl;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-class UserDetailsPresenter extends BasePresenterImpl<UserDetailsView> {
+final class UserDetailsPresenter extends BasePresenterImpl<UserDetailsView> {
 
     @NonNull private final DataManager dataManager;
     @NonNull private final String login;
+    @NonNull private final ExecutorService executor;
 
     UserDetailsPresenter(@NonNull DataManager dataManager, @NonNull String login) {
         this.dataManager = dataManager;
         this.login = login;
+        executor = Executors.newSingleThreadExecutor();
     }
 
     @Override public void attachView(@NonNull UserDetailsView view) {
         super.attachView(view);
         loadUserDetails();
+    }
+
+    @Override public void detachView() {
+        executor.shutdown();
+        super.detachView();
     }
 
     private void loadUserDetails() {
@@ -57,6 +68,16 @@ class UserDetailsPresenter extends BasePresenterImpl<UserDetailsView> {
             });
 
             addRequest(userDetailsRequest);
+        }
+    }
+
+    void onAddToFavoritesClicked(@Nullable UserDetails userDetails) {
+        if (userDetails != null) {
+            executor.submit(() -> dataManager.addUserToFavorites(userDetails));
+
+            if (getView() != null) {
+                getView().showToFavoritesAdded();
+            }
         }
     }
 
