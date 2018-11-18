@@ -55,12 +55,9 @@ class UsersFragment : Fragment(), UsersView {
     private fun initViews() {
         setupToolbar()
         usersRecyclerView.run {
-            layoutManager = LinearLayoutManager(usersRecyclerView!!.context)
+            layoutManager = LinearLayoutManager(usersRecyclerView.context)
             addItemDecoration(
-                DividerItemDecoration(
-                    usersRecyclerView!!.context,
-                    DividerItemDecoration.VERTICAL
-                )
+                DividerItemDecoration(usersRecyclerView.context, DividerItemDecoration.VERTICAL)
             )
         }
     }
