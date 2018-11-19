@@ -1,6 +1,6 @@
 package com.akhbulatov.archsample.di.global.main.userdetails
 
-import com.akhbulatov.archsample.ui.main.userdetails.UserDetailsFragment
+import com.akhbulatov.archsample.presentation.ui.main.userdetails.UserDetailsFragment
 import dagger.BindsInstance
 import dagger.Subcomponent
 

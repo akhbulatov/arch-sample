@@ -1,6 +1,6 @@
 package com.akhbulatov.archsample.di.global.main
 
-import com.akhbulatov.archsample.ui.main.MainPresenter
+import com.akhbulatov.archsample.presentation.mvp.main.MainPresenter
 import dagger.Module
 import dagger.Provides
 import ru.terrakok.cicerone.Router

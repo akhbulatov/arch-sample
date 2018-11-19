@@ -1,7 +1,7 @@
 package com.akhbulatov.archsample.di.global.modules
 
 import com.akhbulatov.archsample.BuildConfig
-import com.akhbulatov.archsample.data.network.GitHubApi
+import com.akhbulatov.archsample.data.global.network.GitHubApi
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient

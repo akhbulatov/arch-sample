@@ -5,6 +5,7 @@ import com.akhbulatov.archsample.di.global.main.MainComponent
 import com.akhbulatov.archsample.di.global.main.favorites.FavoritesComponent
 import com.akhbulatov.archsample.di.global.main.userdetails.UserDetailsComponent
 import com.akhbulatov.archsample.di.global.main.users.UsersComponent
+import com.akhbulatov.archsample.di.global.modules.AppModule
 import com.akhbulatov.archsample.di.global.modules.DataModule
 import com.akhbulatov.archsample.di.global.modules.DatabaseModule
 import com.akhbulatov.archsample.di.global.modules.NavigationModule
@@ -15,6 +16,7 @@ import javax.inject.Singleton
 
 @Component(
     modules = [
+        AppModule::class,
         NetworkModule::class,
         DatabaseModule::class,
         DataModule::class,

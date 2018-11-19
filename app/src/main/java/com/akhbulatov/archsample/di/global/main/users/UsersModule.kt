@@ -1,8 +1,8 @@
 package com.akhbulatov.archsample.di.global.main.users
 
-import com.akhbulatov.archsample.data.global.DataManager
-import com.akhbulatov.archsample.ui.global.ErrorHandler
-import com.akhbulatov.archsample.ui.main.users.UsersPresenter
+import com.akhbulatov.archsample.domain.main.users.UsersInteractor
+import com.akhbulatov.archsample.presentation.mvp.global.ErrorHandler
+import com.akhbulatov.archsample.presentation.mvp.main.users.UsersPresenter
 import dagger.Module
 import dagger.Provides
 import ru.terrakok.cicerone.Router
@@ -11,6 +11,6 @@ import ru.terrakok.cicerone.Router
 class UsersModule {
     @Provides
     @UsersScope
-    fun providePresenter(router: Router, dataManager: DataManager, errorHandler: ErrorHandler) =
-        UsersPresenter(router, dataManager, errorHandler)
+    fun providePresenter(router: Router, interactor: UsersInteractor, errorHandler: ErrorHandler) =
+        UsersPresenter(router, interactor, errorHandler)
 }

@@ -1,6 +1,6 @@
 package com.akhbulatov.archsample.di.global.main.users
 
-import com.akhbulatov.archsample.ui.main.users.UsersFragment
+import com.akhbulatov.archsample.presentation.ui.main.users.UsersFragment
 import dagger.Subcomponent
 
 @Subcomponent(modules = [UsersModule::class])
