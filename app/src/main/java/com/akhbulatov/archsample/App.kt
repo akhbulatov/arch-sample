@@ -1,13 +1,8 @@
 package com.akhbulatov.archsample
 
 import android.app.Application
-import com.akhbulatov.archsample.data.global.DataManager
-import com.akhbulatov.archsample.data.global.DataManagerImpl
-import com.akhbulatov.archsample.data.global.factories.DatabaseFactory
-import com.akhbulatov.archsample.data.global.factories.NetworkFactory
-import com.akhbulatov.archsample.data.global.factories.PrefsFactory
-import com.akhbulatov.archsample.data.local.database.favorites.FavoritesDatabaseMapper
-import com.akhbulatov.archsample.ui.global.ErrorHandler
+import com.akhbulatov.archsample.di.global.AppComponent
+import com.akhbulatov.archsample.di.global.DaggerAppComponent
 import com.arellomobile.mvp.MvpFacade
 
 class App : Application() {
@@ -15,21 +10,15 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         MvpFacade.init()
-        initDataManager()
-        errorHandler = ErrorHandler(this)
+        appComponent = buildAppComponent()
     }
 
-    private fun initDataManager() {
-        dataManager = DataManagerImpl(
-            NetworkFactory.api,
-            DatabaseFactory.getDatabase(this),
-            PrefsFactory.getPrefsHelper(this),
-            FavoritesDatabaseMapper()
-        )
-    }
+    private fun buildAppComponent(): AppComponent =
+        DaggerAppComponent.builder()
+            .context(this)
+            .build()
 
     companion object {
-        lateinit var dataManager: DataManager
-        lateinit var errorHandler: ErrorHandler
+        lateinit var appComponent: AppComponent
     }
 }

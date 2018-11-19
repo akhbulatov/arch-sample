@@ -16,19 +16,28 @@ import kotlinx.android.synthetic.main.fragment_user_details.*
 import kotlinx.android.synthetic.main.loading_error.*
 import kotlinx.android.synthetic.main.loading_progress.*
 import kotlinx.android.synthetic.main.toolbar.*
+import javax.inject.Inject
 
 class UserDetailsFragment : MvpAppCompatFragment(), UserDetailsView {
 
-    @InjectPresenter lateinit var presenter: UserDetailsPresenter
+    @Inject
+    @InjectPresenter
+    lateinit var presenter: UserDetailsPresenter
+
     private lateinit var login: String
     private var userDetails: UserDetails? = null
 
     @ProvidePresenter
-    fun providePresenter() = UserDetailsPresenter(App.dataManager, login, App.errorHandler)
+    fun providePresenter() = presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val args = arguments ?: throw IllegalArgumentException("Must pass user login argument.")
         login = args.getString(ARGUMENT_USER_LOGIN)
+
+        App.appComponent.userDetailsComponentBuilder()
+            .login(login)
+            .build()
+            .inject(this)
         super.onCreate(savedInstanceState)
     }
 

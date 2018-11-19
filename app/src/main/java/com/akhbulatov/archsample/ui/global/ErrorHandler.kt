@@ -4,8 +4,9 @@ import android.content.Context
 import com.akhbulatov.archsample.R
 import retrofit2.HttpException
 import java.io.IOException
+import javax.inject.Inject
 
-class ErrorHandler(private val context: Context) {
+class ErrorHandler @Inject constructor(private val context: Context) {
 
     fun proceed(error: Throwable, messageListener: (String) -> Unit) {
         messageListener(error.userMessage(context))

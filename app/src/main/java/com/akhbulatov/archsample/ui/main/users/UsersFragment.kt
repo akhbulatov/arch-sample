@@ -17,14 +17,18 @@ import kotlinx.android.synthetic.main.fragment_users.*
 import kotlinx.android.synthetic.main.loading_error.*
 import kotlinx.android.synthetic.main.loading_progress.*
 import kotlinx.android.synthetic.main.toolbar.*
+import javax.inject.Inject
 
 class UsersFragment : MvpAppCompatFragment(), UsersView {
 
-    @InjectPresenter lateinit var presenter: UsersPresenter
+    @Inject
+    @InjectPresenter
+    lateinit var presenter: UsersPresenter
+
     private var usersListener: UsersListener? = null
 
     @ProvidePresenter
-    fun providePresenter() = UsersPresenter(App.dataManager, App.errorHandler)
+    fun providePresenter() = presenter
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -34,6 +38,13 @@ class UsersFragment : MvpAppCompatFragment(), UsersView {
             }
             usersListener = it
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        App.appComponent.usersComponentBuilder()
+            .build()
+            .inject(this)
+        super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(

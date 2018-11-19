@@ -7,8 +7,9 @@ import com.akhbulatov.archsample.data.network.GitHubApi
 import com.akhbulatov.archsample.models.User
 import com.akhbulatov.archsample.models.UserDetails
 import retrofit2.Call
+import javax.inject.Inject
 
-class DataManagerImpl(
+class DataManagerImpl @Inject constructor(
     private val api: GitHubApi,
     private val database: AppDatabase,
     private val prefsHelper: PrefsHelper,

@@ -15,13 +15,23 @@ import kotlinx.android.synthetic.main.fragment_favorites.*
 import kotlinx.android.synthetic.main.loading_error.*
 import kotlinx.android.synthetic.main.loading_progress.*
 import kotlinx.android.synthetic.main.toolbar.*
+import javax.inject.Inject
 
 class FavoritesFragment : MvpAppCompatFragment(), FavoritesView {
 
-    @InjectPresenter lateinit var presenter: FavoritesPresenter
+    @Inject
+    @InjectPresenter
+    lateinit var presenter: FavoritesPresenter
 
     @ProvidePresenter
-    fun providePresenter() = FavoritesPresenter(App.dataManager)
+    fun providePresenter() = presenter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        App.appComponent.favoritesComponentBuilder()
+            .build()
+            .inject(this)
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

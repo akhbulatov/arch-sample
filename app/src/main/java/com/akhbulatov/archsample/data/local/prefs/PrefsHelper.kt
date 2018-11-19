@@ -1,5 +1,6 @@
 package com.akhbulatov.archsample.data.local.prefs
 
-import android.content.SharedPreferences
+import android.content.Context
+import javax.inject.Inject
 
-class PrefsHelper(private val sharedPrefs: SharedPreferences)
+class PrefsHelper @Inject constructor(context: Context)

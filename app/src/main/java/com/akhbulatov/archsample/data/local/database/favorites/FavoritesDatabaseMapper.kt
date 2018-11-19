@@ -1,8 +1,10 @@
 package com.akhbulatov.archsample.data.local.database.favorites
 
 import com.akhbulatov.archsample.models.UserDetails
+import javax.inject.Inject
 
-class FavoritesDatabaseMapper {
+class FavoritesDatabaseMapper @Inject constructor() {
+
     fun mapFrom(entities: List<FavoriteEntity>): List<UserDetails> =
         entities.map {
             UserDetails(
