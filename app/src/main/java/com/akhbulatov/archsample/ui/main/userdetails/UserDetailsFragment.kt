@@ -1,4 +1,4 @@
-package com.akhbulatov.archsample.ui.main.userdetailsroot.userdetails
+package com.akhbulatov.archsample.ui.main.userdetails
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import com.akhbulatov.archsample.App
 import com.akhbulatov.archsample.R
 import com.akhbulatov.archsample.models.UserDetails
+import com.akhbulatov.archsample.ui.global.BaseFragment
 import com.akhbulatov.archsample.ui.global.utils.showToast
-import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.squareup.picasso.Picasso
@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.loading_progress.*
 import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 
-class UserDetailsFragment : MvpAppCompatFragment(), UserDetailsView {
+class UserDetailsFragment : BaseFragment(), UserDetailsView {
 
     @Inject
     @InjectPresenter
@@ -32,7 +32,7 @@ class UserDetailsFragment : MvpAppCompatFragment(), UserDetailsView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val args = arguments ?: throw IllegalArgumentException("Must pass user login argument.")
-        login = args.getString(ARGUMENT_USER_LOGIN)
+        login = args.getString(ARGUMENT_LOGIN)
 
         App.appComponent.userDetailsComponentBuilder()
             .login(login)
@@ -56,7 +56,7 @@ class UserDetailsFragment : MvpAppCompatFragment(), UserDetailsView {
         toolbar.run {
             title = login
             setNavigationIcon(R.drawable.ic_arrow_back_white)
-            setNavigationOnClickListener { presenter.onBackClicked() }
+            setNavigationOnClickListener { presenter.onBackPressed() }
             inflateMenu(R.menu.user_details)
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
@@ -103,15 +103,13 @@ class UserDetailsFragment : MvpAppCompatFragment(), UserDetailsView {
         showToast(R.string.user_details_added_to_favorites)
     }
 
-    override fun backToUser() {
-        activity?.finish()
-    }
+    override fun onBackPressed() = presenter.onBackPressed()
 
     companion object {
-        private const val ARGUMENT_USER_LOGIN = "user_login"
+        private const val ARGUMENT_LOGIN = "login"
 
-        fun newInstance(userLogin: String): UserDetailsFragment {
-            val args = Bundle().apply { putString(ARGUMENT_USER_LOGIN, userLogin) }
+        fun newInstance(login: String): UserDetailsFragment {
+            val args = Bundle().apply { putString(ARGUMENT_LOGIN, login) }
             return UserDetailsFragment().apply { arguments = args }
         }
     }

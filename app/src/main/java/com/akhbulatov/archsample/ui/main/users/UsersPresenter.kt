@@ -4,14 +4,17 @@ import com.akhbulatov.archsample.data.global.DataManager
 import com.akhbulatov.archsample.models.User
 import com.akhbulatov.archsample.ui.global.BasePresenter
 import com.akhbulatov.archsample.ui.global.ErrorHandler
+import com.akhbulatov.archsample.ui.global.Screens
 import com.arellomobile.mvp.InjectViewState
 import io.reactivex.android.schedulers.AndroidSchedulers
+import ru.terrakok.cicerone.Router
 
 @InjectViewState
 class UsersPresenter(
+    private val router: Router,
     private val dataManager: DataManager,
     private val errorHandler: ErrorHandler
-) : BasePresenter<UsersView>() {
+) : BasePresenter<UsersView>(router) {
 
     override fun onFirstViewAttach() {
         loadUsers()
@@ -29,11 +32,7 @@ class UsersPresenter(
             .connect()
     }
 
-    fun onUserClicked(user: User) {
-        viewState.navigateToUserDetails(user)
-    }
+    fun onUserClicked(user: User) = router.navigateTo(Screens.UserDetails(user.login))
 
-    fun onFavoritesClicked() {
-        viewState.navigateToFavorites()
-    }
+    fun onFavoritesClicked() = router.navigateTo(Screens.Favorites)
 }

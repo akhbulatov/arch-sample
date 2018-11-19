@@ -1,4 +1,4 @@
-package com.akhbulatov.archsample.ui.main.userdetailsroot.userdetails
+package com.akhbulatov.archsample.ui.main.userdetails
 
 import com.akhbulatov.archsample.models.UserDetails
 import com.arellomobile.mvp.MvpView
@@ -15,7 +15,4 @@ interface UserDetailsView : MvpView {
 
     @StateStrategyType(OneExecutionStateStrategy::class)
     fun showToFavoritesAdded()
-
-    @StateStrategyType(OneExecutionStateStrategy::class)
-    fun backToUser()
 }

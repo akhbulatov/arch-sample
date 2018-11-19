@@ -1,6 +1,5 @@
 package com.akhbulatov.archsample.ui.main.users
 
-import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -10,7 +9,7 @@ import android.view.ViewGroup
 import com.akhbulatov.archsample.App
 import com.akhbulatov.archsample.R
 import com.akhbulatov.archsample.models.User
-import com.arellomobile.mvp.MvpAppCompatFragment
+import com.akhbulatov.archsample.ui.global.BaseFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.fragment_users.*
@@ -19,26 +18,14 @@ import kotlinx.android.synthetic.main.loading_progress.*
 import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 
-class UsersFragment : MvpAppCompatFragment(), UsersView {
+class UsersFragment : BaseFragment(), UsersView {
 
     @Inject
     @InjectPresenter
     lateinit var presenter: UsersPresenter
 
-    private var usersListener: UsersListener? = null
-
     @ProvidePresenter
     fun providePresenter() = presenter
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        context?.let {
-            if (it !is UsersListener) {
-                throw ClassCastException("$it must implement ${UsersListener::class.java.simpleName})")
-            }
-            usersListener = it
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         App.appComponent.usersComponentBuilder()
@@ -100,16 +87,5 @@ class UsersFragment : MvpAppCompatFragment(), UsersView {
         loadingErrorLayout.visibility = View.VISIBLE
     }
 
-    override fun navigateToUserDetails(user: User) {
-        usersListener?.onUserClick(user)
-    }
-
-    override fun navigateToFavorites() {
-        usersListener?.onFavoritesClick()
-    }
-
-    interface UsersListener {
-        fun onUserClick(user: User)
-        fun onFavoritesClick()
-    }
+    override fun onBackPressed() = presenter.onBackPressed()
 }

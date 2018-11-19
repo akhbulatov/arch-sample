@@ -1,4 +1,4 @@
-package com.akhbulatov.archsample.ui.main.userdetailsroot.userdetails
+package com.akhbulatov.archsample.ui.main.userdetails
 
 import com.akhbulatov.archsample.data.global.DataManager
 import com.akhbulatov.archsample.models.UserDetails
@@ -6,13 +6,15 @@ import com.akhbulatov.archsample.ui.global.BasePresenter
 import com.akhbulatov.archsample.ui.global.ErrorHandler
 import com.arellomobile.mvp.InjectViewState
 import io.reactivex.android.schedulers.AndroidSchedulers
+import ru.terrakok.cicerone.Router
 
 @InjectViewState
 class UserDetailsPresenter(
+    router: Router,
     private val dataManager: DataManager,
     private val login: String,
     private val errorHandler: ErrorHandler
-) : BasePresenter<UserDetailsView>() {
+) : BasePresenter<UserDetailsView>(router) {
 
     override fun onFirstViewAttach() {
         loadUserDetails()
@@ -45,6 +47,4 @@ class UserDetailsPresenter(
             )
             .connect()
     }
-
-    fun onBackClicked() = viewState.backToUser()
 }

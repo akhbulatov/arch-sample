@@ -1,16 +1,16 @@
-package com.akhbulatov.archsample.di.global.main.users
+package com.akhbulatov.archsample.di.global.main.favorites
 
 import com.akhbulatov.archsample.data.global.DataManager
 import com.akhbulatov.archsample.ui.global.ErrorHandler
-import com.akhbulatov.archsample.ui.main.users.UsersPresenter
+import com.akhbulatov.archsample.ui.main.favorites.FavoritesPresenter
 import dagger.Module
 import dagger.Provides
 import ru.terrakok.cicerone.Router
 
 @Module
-class UsersModule {
+class FavoritesModule {
     @Provides
-    @UsersScope
+    @FavoritesScope
     fun providePresenter(router: Router, dataManager: DataManager, errorHandler: ErrorHandler) =
-        UsersPresenter(router, dataManager, errorHandler)
+        FavoritesPresenter(router, dataManager, errorHandler)
 }

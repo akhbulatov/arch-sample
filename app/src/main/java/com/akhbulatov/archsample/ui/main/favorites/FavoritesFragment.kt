@@ -1,4 +1,4 @@
-package com.akhbulatov.archsample.ui.main.favoritesroot.favorites
+package com.akhbulatov.archsample.ui.main.favorites
 
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import com.akhbulatov.archsample.App
 import com.akhbulatov.archsample.R
 import com.akhbulatov.archsample.models.UserDetails
-import com.arellomobile.mvp.MvpAppCompatFragment
+import com.akhbulatov.archsample.ui.global.BaseFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.fragment_favorites.*
@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.loading_progress.*
 import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 
-class FavoritesFragment : MvpAppCompatFragment(), FavoritesView {
+class FavoritesFragment : BaseFragment(), FavoritesView {
 
     @Inject
     @InjectPresenter
@@ -48,7 +48,7 @@ class FavoritesFragment : MvpAppCompatFragment(), FavoritesView {
         toolbar.run {
             setTitle(R.string.favorites_title)
             setNavigationIcon(R.drawable.ic_arrow_back_white)
-            setNavigationOnClickListener { presenter.onBackClicked() }
+            setNavigationOnClickListener { presenter.onBackPressed() }
         }
 
         favoritesRecyclerView.addItemDecoration(
@@ -75,7 +75,5 @@ class FavoritesFragment : MvpAppCompatFragment(), FavoritesView {
         loadingErrorLayout.visibility = View.VISIBLE
     }
 
-    override fun backToUsers() {
-        activity?.finish()
-    }
+    override fun onBackPressed() = presenter.onBackPressed()
 }

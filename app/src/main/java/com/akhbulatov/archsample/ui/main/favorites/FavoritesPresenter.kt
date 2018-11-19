@@ -1,16 +1,18 @@
-package com.akhbulatov.archsample.ui.main.favoritesroot.favorites
+package com.akhbulatov.archsample.ui.main.favorites
 
 import com.akhbulatov.archsample.data.global.DataManager
 import com.akhbulatov.archsample.ui.global.BasePresenter
 import com.akhbulatov.archsample.ui.global.ErrorHandler
 import com.arellomobile.mvp.InjectViewState
 import io.reactivex.android.schedulers.AndroidSchedulers
+import ru.terrakok.cicerone.Router
 
 @InjectViewState
 class FavoritesPresenter(
+    router: Router,
     private val dataManager: DataManager,
     private val errorHandler: ErrorHandler
-) : BasePresenter<FavoritesView>() {
+) : BasePresenter<FavoritesView>(router) {
 
     override fun onFirstViewAttach() {
         loadFavorites()
@@ -33,6 +35,4 @@ class FavoritesPresenter(
             )
             .connect()
     }
-
-    fun onBackClicked() = viewState.backToUsers()
 }

@@ -1,6 +1,6 @@
-package com.akhbulatov.archsample.di.global.main.favoritesroot.favorites
+package com.akhbulatov.archsample.di.global.main.favorites
 
-import com.akhbulatov.archsample.ui.main.favoritesroot.favorites.FavoritesFragment
+import com.akhbulatov.archsample.ui.main.favorites.FavoritesFragment
 import dagger.Subcomponent
 
 @Subcomponent(modules = [FavoritesModule::class])

@@ -1,37 +1,51 @@
 package com.akhbulatov.archsample.ui.main
 
-import android.content.Intent
 import android.os.Bundle
+import com.akhbulatov.archsample.App
 import com.akhbulatov.archsample.R
-import com.akhbulatov.archsample.models.User
-import com.akhbulatov.archsample.ui.main.favoritesroot.FavoritesRootActivity
-import com.akhbulatov.archsample.ui.main.userdetailsroot.UserDetailsRootActivity
-import com.akhbulatov.archsample.ui.main.users.UsersFragment
+import com.akhbulatov.archsample.ui.global.BaseFragment
 import com.arellomobile.mvp.MvpAppCompatActivity
+import com.arellomobile.mvp.presenter.InjectPresenter
+import com.arellomobile.mvp.presenter.ProvidePresenter
+import ru.terrakok.cicerone.Navigator
+import ru.terrakok.cicerone.NavigatorHolder
+import ru.terrakok.cicerone.android.support.SupportAppNavigator
+import javax.inject.Inject
 
-class MainActivity : MvpAppCompatActivity(), UsersFragment.UsersListener {
+class MainActivity : MvpAppCompatActivity(), MainView {
+
+    @Inject lateinit var navigatorHolder: NavigatorHolder
+
+    @Inject
+    @InjectPresenter
+    lateinit var presenter: MainPresenter
+
+    private lateinit var navigator: Navigator
+
+    private val currentFragment
+        get() = supportFragmentManager.findFragmentById(R.id.container) as BaseFragment?
+
+    @ProvidePresenter
+    fun providePresenter() = presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        App.appComponent.mainComponentBuilder()
+            .build()
+            .inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_container)
-        navigateToUsers()
+        navigator = SupportAppNavigator(this, R.id.container)
     }
 
-    private fun navigateToUsers() {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.container, UsersFragment())
-            .commit()
+    override fun onResumeFragments() {
+        super.onResumeFragments()
+        navigatorHolder.setNavigator(navigator)
     }
 
-    override fun onUserClick(user: User) = navigateToUserDetails(user)
-
-    override fun onFavoritesClick() = navigateToFavorites()
-
-    private fun navigateToUserDetails(user: User) {
-        startActivity(UserDetailsRootActivity.createIntent(this, user.login))
+    override fun onPause() {
+        navigatorHolder.removeNavigator()
+        super.onPause()
     }
 
-    private fun navigateToFavorites() {
-        startActivity(Intent(this, FavoritesRootActivity::class.java))
-    }
+    override fun onBackPressed() = currentFragment?.onBackPressed() ?: presenter.onBackPressed()
 }
