@@ -6,7 +6,9 @@ import com.akhbulatov.archsample.data.local.prefs.PrefsHelper
 import com.akhbulatov.archsample.data.network.GitHubApi
 import com.akhbulatov.archsample.models.User
 import com.akhbulatov.archsample.models.UserDetails
-import retrofit2.Call
+import io.reactivex.Completable
+import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class DataManagerImpl @Inject constructor(
@@ -16,16 +18,23 @@ class DataManagerImpl @Inject constructor(
     private val favoritesDatabaseMapper: FavoritesDatabaseMapper
 ) : DataManager {
 
-    override fun getUsers(): Call<List<User>> = api.getUsers()
-    override fun getUserDetails(login: String): Call<UserDetails> = api.getUserDetails(login)
+    override fun getUsers(): Single<List<User>> =
+        api.getUsers()
+            .subscribeOn(Schedulers.io())
 
-    override fun getFavorites(): List<UserDetails> {
-        val favorites = database.favoriteDao().getAll()
-        return favoritesDatabaseMapper.mapFrom(favorites)
-    }
+    override fun getUserDetails(login: String): Single<UserDetails> =
+        api.getUserDetails(login)
+            .subscribeOn(Schedulers.io())
 
-    override fun addUserToFavorites(userDetails: UserDetails) {
-        val favorite = favoritesDatabaseMapper.mapTo(userDetails)
-        database.favoriteDao().insert(favorite)
-    }
+    override fun getFavorites(): Single<List<UserDetails>> =
+        database.favoriteDao().getAll()
+            .map { favoritesDatabaseMapper.mapFrom(it) }
+            .subscribeOn(Schedulers.io())
+
+    override fun addUserToFavorites(userDetails: UserDetails): Completable =
+        Completable.fromAction {
+            val favorite = favoritesDatabaseMapper.mapTo(userDetails)
+            database.favoriteDao().insert(favorite)
+        }
+            .subscribeOn(Schedulers.io())
 }

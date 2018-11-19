@@ -11,6 +11,7 @@ interface FavoritesView : MvpView {
     fun showFavorites(favorites: List<UserDetails>)
     fun showLoadingProgress(show: Boolean)
     fun showEmptyFavorites()
+    fun showError(error: String)
 
     @StateStrategyType(OneExecutionStateStrategy::class)
     fun backToUsers()

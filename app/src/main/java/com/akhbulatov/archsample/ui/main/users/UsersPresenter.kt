@@ -5,9 +5,7 @@ import com.akhbulatov.archsample.models.User
 import com.akhbulatov.archsample.ui.global.BasePresenter
 import com.akhbulatov.archsample.ui.global.ErrorHandler
 import com.arellomobile.mvp.InjectViewState
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import io.reactivex.android.schedulers.AndroidSchedulers
 
 @InjectViewState
 class UsersPresenter(
@@ -20,30 +18,15 @@ class UsersPresenter(
     }
 
     private fun loadUsers() {
-        viewState.showLoadingProgress(true)
-
-        val usersRequest = dataManager.getUsers()
-        usersRequest.enqueue(object : Callback<List<User>> {
-
-            override fun onResponse(call: Call<List<User>>, response: Response<List<User>>) {
-                viewState.showLoadingProgress(false)
-
-                if (response.isSuccessful) {
-                    viewState.showUsers(response.body()!!)
-                } else {
-                    viewState.showError(response.message())
-                }
-            }
-
-            override fun onFailure(call: Call<List<User>>, t: Throwable) {
-                if (!call.isCanceled) {
-                    viewState.showLoadingProgress(false)
-                    errorHandler.proceed(t) { viewState.showError(it) }
-                }
-            }
-        })
-
-        addRequest(usersRequest)
+        dataManager.getUsers()
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe { viewState.showLoadingProgress(true) }
+            .doAfterTerminate { viewState.showLoadingProgress(false) }
+            .subscribe(
+                { viewState.showUsers(it) },
+                { errorHandler.proceed(it) { viewState.showError(it) } }
+            )
+            .connect()
     }
 
     fun onUserClicked(user: User) {

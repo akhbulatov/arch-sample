@@ -1,39 +1,37 @@
 package com.akhbulatov.archsample.ui.main.favoritesroot.favorites
 
 import com.akhbulatov.archsample.data.global.DataManager
-import com.akhbulatov.archsample.models.UserDetails
 import com.akhbulatov.archsample.ui.global.BasePresenter
+import com.akhbulatov.archsample.ui.global.ErrorHandler
 import com.arellomobile.mvp.InjectViewState
-import java.util.concurrent.Callable
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
+import io.reactivex.android.schedulers.AndroidSchedulers
 
 @InjectViewState
-class FavoritesPresenter(dataManager: DataManager) : BasePresenter<FavoritesView>() {
-
-    private val executor: ExecutorService = Executors.newSingleThreadExecutor()
-    private val favoritesCallable: Callable<List<UserDetails>> =
-        Callable { dataManager.getFavorites() }
+class FavoritesPresenter(
+    private val dataManager: DataManager,
+    private val errorHandler: ErrorHandler
+) : BasePresenter<FavoritesView>() {
 
     override fun onFirstViewAttach() {
         loadFavorites()
     }
 
-    override fun onDestroy() {
-        executor.shutdown()
-        super.onDestroy()
-    }
-
     private fun loadFavorites() {
-        viewState.showLoadingProgress(true)
-        val favorites = executor.submit(favoritesCallable).get()
-        viewState.showLoadingProgress(false)
-
-        if (!favorites.isEmpty()) {
-            viewState.showFavorites(favorites)
-        } else {
-            viewState.showEmptyFavorites()
-        }
+        dataManager.getFavorites()
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe { viewState.showLoadingProgress(true) }
+            .doAfterTerminate { viewState.showLoadingProgress(false) }
+            .subscribe(
+                {
+                    if (!it.isEmpty()) {
+                        viewState.showFavorites(it)
+                    } else {
+                        viewState.showEmptyFavorites()
+                    }
+                },
+                { errorHandler.proceed(it) { viewState.showError(it) } }
+            )
+            .connect()
     }
 
     fun onBackClicked() = viewState.backToUsers()

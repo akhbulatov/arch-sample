@@ -5,11 +5,7 @@ import com.akhbulatov.archsample.models.UserDetails
 import com.akhbulatov.archsample.ui.global.BasePresenter
 import com.akhbulatov.archsample.ui.global.ErrorHandler
 import com.arellomobile.mvp.InjectViewState
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
+import io.reactivex.android.schedulers.AndroidSchedulers
 
 @InjectViewState
 class UserDetailsPresenter(
@@ -18,49 +14,36 @@ class UserDetailsPresenter(
     private val errorHandler: ErrorHandler
 ) : BasePresenter<UserDetailsView>() {
 
-    private val executor: ExecutorService = Executors.newSingleThreadExecutor()
-
     override fun onFirstViewAttach() {
         loadUserDetails()
     }
 
-    override fun onDestroy() {
-        executor.shutdown()
-        super.onDestroy()
-    }
-
     private fun loadUserDetails() {
-        viewState.showLoadingProgress(true)
-        viewState.showContentLayout(false)
-
-        val userDetailsRequest = dataManager.getUserDetails(login)
-        userDetailsRequest.enqueue(object : Callback<UserDetails> {
-
-            override fun onResponse(call: Call<UserDetails>, response: Response<UserDetails>) {
-                viewState.showLoadingProgress(false)
-                viewState.showContentLayout(true)
-
-                if (response.isSuccessful) {
-                    viewState.showUserDetails(response.body()!!)
-                } else {
-                    viewState.showError(response.message())
-                }
+        dataManager.getUserDetails(login)
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                viewState.showLoadingProgress(true)
+                viewState.showContentLayout(false)
             }
-
-            override fun onFailure(call: Call<UserDetails>, t: Throwable) {
-                if (!call.isCanceled) {
-                    viewState.showLoadingProgress(false)
-                    errorHandler.proceed(t) { viewState.showError(it) }
-                }
-            }
-        })
-
-        addRequest(userDetailsRequest)
+            .doAfterTerminate { viewState.showLoadingProgress(false) }
+            .subscribe(
+                {
+                    viewState.showContentLayout(true)
+                    viewState.showUserDetails(it)
+                },
+                { errorHandler.proceed(it) { viewState.showError(it) } }
+            )
+            .connect()
     }
 
     fun onAddToFavoritesClicked(userDetails: UserDetails) {
-        executor.submit { dataManager.addUserToFavorites(userDetails) }
-        viewState.showToFavoritesAdded()
+        dataManager.addUserToFavorites(userDetails)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { viewState.showToFavoritesAdded() },
+                { errorHandler.proceed(it) { viewState.showError(it) } }
+            )
+            .connect()
     }
 
     fun onBackClicked() = viewState.backToUser()

@@ -70,6 +70,11 @@ class FavoritesFragment : MvpAppCompatFragment(), FavoritesView {
         loadingErrorLayout.visibility = View.VISIBLE
     }
 
+    override fun showError(error: String) {
+        loadingErrorTextView.text = error
+        loadingErrorLayout.visibility = View.VISIBLE
+    }
+
     override fun backToUsers() {
         activity?.finish()
     }
