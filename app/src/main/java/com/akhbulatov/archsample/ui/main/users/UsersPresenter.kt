@@ -2,57 +2,55 @@ package com.akhbulatov.archsample.ui.main.users
 
 import com.akhbulatov.archsample.data.global.DataManager
 import com.akhbulatov.archsample.models.User
-import com.akhbulatov.archsample.ui.global.BasePresenterImpl
+import com.akhbulatov.archsample.ui.global.BasePresenter
 import com.akhbulatov.archsample.ui.global.ErrorHandler
+import com.arellomobile.mvp.InjectViewState
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+@InjectViewState
 class UsersPresenter(
     private val dataManager: DataManager,
     private val errorHandler: ErrorHandler
-) : BasePresenterImpl<UsersView>() {
+) : BasePresenter<UsersView>() {
 
-    override fun attachView(view: UsersView) {
-        super.attachView(view)
+    override fun onFirstViewAttach() {
         loadUsers()
     }
 
     private fun loadUsers() {
-        view?.let {
-            it.showLoadingProgress(true)
+        viewState.showLoadingProgress(true)
 
-            val usersRequest = dataManager.getUsers()
-            usersRequest.enqueue(object : Callback<List<User>> {
-                override fun onResponse(call: Call<List<User>>, response: Response<List<User>>) {
-                    view?.let {
-                        it.showLoadingProgress(false)
+        val usersRequest = dataManager.getUsers()
+        usersRequest.enqueue(object : Callback<List<User>> {
 
-                        if (response.isSuccessful) {
-                            it.showUsers(response.body()!!)
-                        } else {
-                            view?.showError(response.message())
-                        }
-                    }
+            override fun onResponse(call: Call<List<User>>, response: Response<List<User>>) {
+                viewState.showLoadingProgress(false)
+
+                if (response.isSuccessful) {
+                    viewState.showUsers(response.body()!!)
+                } else {
+                    viewState.showError(response.message())
                 }
+            }
 
-                override fun onFailure(call: Call<List<User>>, t: Throwable) {
-                    if (!call.isCanceled) {
-                        view?.showLoadingProgress(false)
-                        errorHandler.proceed(t) { view?.showError(it) }
-                    }
+            override fun onFailure(call: Call<List<User>>, t: Throwable) {
+                if (!call.isCanceled) {
+                    viewState.showLoadingProgress(false)
+                    errorHandler.proceed(t) { viewState.showError(it) }
                 }
-            })
+            }
+        })
 
-            addRequest(usersRequest)
-        }
+        addRequest(usersRequest)
     }
 
     fun onUserClicked(user: User) {
-        view?.navigateToUserDetails(user)
+        viewState.navigateToUserDetails(user)
     }
 
     fun onFavoritesClicked() {
-        view?.navigateToFavorites()
+        viewState.navigateToFavorites()
     }
 }

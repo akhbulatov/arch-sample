@@ -2,68 +2,66 @@ package com.akhbulatov.archsample.ui.main.userdetailsroot.userdetails
 
 import com.akhbulatov.archsample.data.global.DataManager
 import com.akhbulatov.archsample.models.UserDetails
-import com.akhbulatov.archsample.ui.global.BasePresenterImpl
+import com.akhbulatov.archsample.ui.global.BasePresenter
 import com.akhbulatov.archsample.ui.global.ErrorHandler
+import com.arellomobile.mvp.InjectViewState
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
+@InjectViewState
 class UserDetailsPresenter(
     private val dataManager: DataManager,
     private val login: String,
     private val errorHandler: ErrorHandler
-) : BasePresenterImpl<UserDetailsView>() {
+) : BasePresenter<UserDetailsView>() {
 
     private val executor: ExecutorService = Executors.newSingleThreadExecutor()
 
-    override fun attachView(view: UserDetailsView) {
-        super.attachView(view)
+    override fun onFirstViewAttach() {
         loadUserDetails()
     }
 
-    override fun detachView() {
+    override fun onDestroy() {
         executor.shutdown()
-        super.detachView()
+        super.onDestroy()
     }
 
     private fun loadUserDetails() {
-        view?.let {
-            it.showLoadingProgress(true)
-            it.showContentLayout(false)
+        viewState.showLoadingProgress(true)
+        viewState.showContentLayout(false)
 
-            val userDetailsRequest = dataManager.getUserDetails(login)
-            userDetailsRequest.enqueue(object : Callback<UserDetails> {
-                override fun onResponse(call: Call<UserDetails>, response: Response<UserDetails>) {
-                    view?.let {
-                        it.showLoadingProgress(false)
-                        it.showContentLayout(true)
+        val userDetailsRequest = dataManager.getUserDetails(login)
+        userDetailsRequest.enqueue(object : Callback<UserDetails> {
 
-                        if (response.isSuccessful) {
-                            it.showUserDetails(response.body()!!)
-                        } else {
-                            view?.showError(response.message())
-                        }
-                    }
+            override fun onResponse(call: Call<UserDetails>, response: Response<UserDetails>) {
+                viewState.showLoadingProgress(false)
+                viewState.showContentLayout(true)
+
+                if (response.isSuccessful) {
+                    viewState.showUserDetails(response.body()!!)
+                } else {
+                    viewState.showError(response.message())
                 }
+            }
 
-                override fun onFailure(call: Call<UserDetails>, t: Throwable) {
-                    if (!call.isCanceled) {
-                        view?.showLoadingProgress(false)
-                        errorHandler.proceed(t) { view?.showError(it) }
-                    }
+            override fun onFailure(call: Call<UserDetails>, t: Throwable) {
+                if (!call.isCanceled) {
+                    viewState.showLoadingProgress(false)
+                    errorHandler.proceed(t) { viewState.showError(it) }
                 }
-            })
+            }
+        })
 
-            addRequest(userDetailsRequest)
-        }
+        addRequest(userDetailsRequest)
     }
 
     fun onAddToFavoritesClicked(userDetails: UserDetails) {
         executor.submit { dataManager.addUserToFavorites(userDetails) }
-        view?.showToFavoritesAdded()
+        viewState.showToFavoritesAdded()
     }
 
-    fun onBackClicked() = view?.backToUser()
+    fun onBackClicked() = viewState.backToUser()
 }

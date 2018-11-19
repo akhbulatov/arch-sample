@@ -3,11 +3,11 @@ package com.akhbulatov.archsample.ui.main.userdetailsroot
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import com.akhbulatov.archsample.R
 import com.akhbulatov.archsample.ui.main.userdetailsroot.userdetails.UserDetailsFragment
+import com.arellomobile.mvp.MvpAppCompatActivity
 
-class UserDetailsRootActivity : AppCompatActivity() {
+class UserDetailsRootActivity : MvpAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

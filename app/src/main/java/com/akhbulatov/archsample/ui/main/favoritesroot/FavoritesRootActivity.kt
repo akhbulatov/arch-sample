@@ -1,11 +1,11 @@
 package com.akhbulatov.archsample.ui.main.favoritesroot
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import com.akhbulatov.archsample.R
 import com.akhbulatov.archsample.ui.main.favoritesroot.favorites.FavoritesFragment
+import com.arellomobile.mvp.MvpAppCompatActivity
 
-class FavoritesRootActivity : AppCompatActivity() {
+class FavoritesRootActivity : MvpAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

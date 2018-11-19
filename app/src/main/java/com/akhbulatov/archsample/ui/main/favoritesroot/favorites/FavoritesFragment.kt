@@ -1,7 +1,6 @@
 package com.akhbulatov.archsample.ui.main.favoritesroot.favorites
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
 import android.view.LayoutInflater
 import android.view.View
@@ -9,19 +8,20 @@ import android.view.ViewGroup
 import com.akhbulatov.archsample.App
 import com.akhbulatov.archsample.R
 import com.akhbulatov.archsample.models.UserDetails
+import com.arellomobile.mvp.MvpAppCompatFragment
+import com.arellomobile.mvp.presenter.InjectPresenter
+import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.fragment_favorites.*
 import kotlinx.android.synthetic.main.loading_error.*
 import kotlinx.android.synthetic.main.loading_progress.*
 import kotlinx.android.synthetic.main.toolbar.*
 
-class FavoritesFragment : Fragment(), FavoritesView {
+class FavoritesFragment : MvpAppCompatFragment(), FavoritesView {
 
-    private lateinit var presenter: FavoritesPresenter
+    @InjectPresenter lateinit var presenter: FavoritesPresenter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        presenter = FavoritesPresenter(App.dataManager)
-        super.onCreate(savedInstanceState)
-    }
+    @ProvidePresenter
+    fun providePresenter() = FavoritesPresenter(App.dataManager)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,12 +32,6 @@ class FavoritesFragment : Fragment(), FavoritesView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
-        presenter.attachView(this)
-    }
-
-    override fun onDestroyView() {
-        presenter.detachView()
-        super.onDestroyView()
     }
 
     private fun initViews() {

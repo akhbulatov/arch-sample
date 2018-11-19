@@ -2,44 +2,39 @@ package com.akhbulatov.archsample.ui.main.favoritesroot.favorites
 
 import com.akhbulatov.archsample.data.global.DataManager
 import com.akhbulatov.archsample.models.UserDetails
-import com.akhbulatov.archsample.ui.global.BasePresenterImpl
+import com.akhbulatov.archsample.ui.global.BasePresenter
+import com.arellomobile.mvp.InjectViewState
 import java.util.concurrent.Callable
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-class FavoritesPresenter(dataManager: DataManager) : BasePresenterImpl<FavoritesView>() {
+@InjectViewState
+class FavoritesPresenter(dataManager: DataManager) : BasePresenter<FavoritesView>() {
 
     private val executor: ExecutorService = Executors.newSingleThreadExecutor()
     private val favoritesCallable: Callable<List<UserDetails>> =
         Callable { dataManager.getFavorites() }
 
-    override fun attachView(view: FavoritesView) {
-        super.attachView(view)
+    override fun onFirstViewAttach() {
         loadFavorites()
     }
 
-    override fun detachView() {
+    override fun onDestroy() {
         executor.shutdown()
-        super.detachView()
+        super.onDestroy()
     }
 
     private fun loadFavorites() {
-        view?.let {
-            it.showLoadingProgress(true)
+        viewState.showLoadingProgress(true)
+        val favorites = executor.submit(favoritesCallable).get()
+        viewState.showLoadingProgress(false)
 
-            val favorites = executor.submit(favoritesCallable).get()
-
-            view?.let {
-                it.showLoadingProgress(false)
-
-                if (!favorites.isEmpty()) {
-                    it.showFavorites(favorites)
-                } else {
-                    it.showEmptyFavorites()
-                }
-            }
+        if (!favorites.isEmpty()) {
+            viewState.showFavorites(favorites)
+        } else {
+            viewState.showEmptyFavorites()
         }
     }
 
-    fun onBackClicked() = view?.backToUsers()
+    fun onBackClicked() = viewState.backToUsers()
 }

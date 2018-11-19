@@ -8,11 +8,13 @@ import com.akhbulatov.archsample.data.global.factories.NetworkFactory
 import com.akhbulatov.archsample.data.global.factories.PrefsFactory
 import com.akhbulatov.archsample.data.local.database.favorites.FavoritesDatabaseMapper
 import com.akhbulatov.archsample.ui.global.ErrorHandler
+import com.arellomobile.mvp.MvpFacade
 
 class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        MvpFacade.init()
         initDataManager()
         errorHandler = ErrorHandler(this)
     }

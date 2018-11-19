@@ -1,7 +1,6 @@
 package com.akhbulatov.archsample.ui.main.userdetailsroot.userdetails
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,23 +8,28 @@ import com.akhbulatov.archsample.App
 import com.akhbulatov.archsample.R
 import com.akhbulatov.archsample.models.UserDetails
 import com.akhbulatov.archsample.ui.global.utils.showToast
+import com.arellomobile.mvp.MvpAppCompatFragment
+import com.arellomobile.mvp.presenter.InjectPresenter
+import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_user_details.*
 import kotlinx.android.synthetic.main.loading_error.*
 import kotlinx.android.synthetic.main.loading_progress.*
 import kotlinx.android.synthetic.main.toolbar.*
 
-class UserDetailsFragment : Fragment(), UserDetailsView {
+class UserDetailsFragment : MvpAppCompatFragment(), UserDetailsView {
 
-    private lateinit var presenter: UserDetailsPresenter
+    @InjectPresenter lateinit var presenter: UserDetailsPresenter
     private lateinit var login: String
     private var userDetails: UserDetails? = null
 
+    @ProvidePresenter
+    fun providePresenter() = UserDetailsPresenter(App.dataManager, login, App.errorHandler)
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         val args = arguments ?: throw IllegalArgumentException("Must pass user login argument.")
         login = args.getString(ARGUMENT_USER_LOGIN)
-        presenter = UserDetailsPresenter(App.dataManager, login, App.errorHandler)
+        super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(
@@ -37,12 +41,6 @@ class UserDetailsFragment : Fragment(), UserDetailsView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupToolbar()
-        presenter.attachView(this)
-    }
-
-    override fun onDestroyView() {
-        presenter.detachView()
-        super.onDestroyView()
     }
 
     private fun setupToolbar() {
