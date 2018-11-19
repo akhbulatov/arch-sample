@@ -7,6 +7,7 @@ interface UserDetailsView : BaseView {
     fun showContentLayout(show: Boolean)
     fun showUserDetails(userDetails: UserDetails)
     fun showLoadingProgress(show: Boolean)
+    fun showError(error: String)
     fun showToFavoritesAdded()
     fun backToUser()
 }

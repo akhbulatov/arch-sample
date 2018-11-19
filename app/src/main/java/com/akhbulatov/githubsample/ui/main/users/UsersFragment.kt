@@ -12,6 +12,7 @@ import com.akhbulatov.githubsample.App
 import com.akhbulatov.githubsample.R
 import com.akhbulatov.githubsample.models.User
 import kotlinx.android.synthetic.main.fragment_users.*
+import kotlinx.android.synthetic.main.loading_error.*
 import kotlinx.android.synthetic.main.loading_progress.*
 import kotlinx.android.synthetic.main.toolbar.*
 
@@ -31,7 +32,7 @@ class UsersFragment : Fragment(), UsersView {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        presenter = UsersPresenter(App.dataManager)
+        presenter = UsersPresenter(App.dataManager, App.errorHandler)
         super.onCreate(savedInstanceState)
     }
 
@@ -87,6 +88,11 @@ class UsersFragment : Fragment(), UsersView {
 
     override fun showLoadingProgress(show: Boolean) {
         loadingProgressLayout.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    override fun showError(error: String) {
+        loadingErrorTextView.text = error
+        loadingErrorLayout.visibility = View.VISIBLE
     }
 
     override fun navigateToUserDetails(user: User) {

@@ -11,6 +11,7 @@ import com.akhbulatov.githubsample.models.UserDetails
 import com.akhbulatov.githubsample.ui.global.utils.showToast
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_user_details.*
+import kotlinx.android.synthetic.main.loading_error.*
 import kotlinx.android.synthetic.main.loading_progress.*
 import kotlinx.android.synthetic.main.toolbar.*
 
@@ -24,7 +25,7 @@ class UserDetailsFragment : Fragment(), UserDetailsView {
         super.onCreate(savedInstanceState)
         val args = arguments ?: throw IllegalArgumentException("Must pass user login argument.")
         login = args.getString(ARGUMENT_USER_LOGIN)
-        presenter = UserDetailsPresenter(App.dataManager, login)
+        presenter = UserDetailsPresenter(App.dataManager, login, App.errorHandler)
     }
 
     override fun onCreateView(
@@ -84,6 +85,11 @@ class UserDetailsFragment : Fragment(), UserDetailsView {
 
     override fun showLoadingProgress(show: Boolean) {
         loadingProgressLayout.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    override fun showError(error: String) {
+        loadingErrorTextView.text = error
+        loadingErrorLayout.visibility = View.VISIBLE
     }
 
     override fun showToFavoritesAdded() {

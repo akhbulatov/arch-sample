@@ -3,6 +3,7 @@ package com.akhbulatov.githubsample.ui.main.userdetailsroot.userdetails
 import com.akhbulatov.githubsample.data.global.DataManager
 import com.akhbulatov.githubsample.models.UserDetails
 import com.akhbulatov.githubsample.ui.global.BasePresenterImpl
+import com.akhbulatov.githubsample.ui.global.ErrorHandler
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -11,7 +12,8 @@ import java.util.concurrent.Executors
 
 class UserDetailsPresenter(
     private val dataManager: DataManager,
-    private val login: String
+    private val login: String,
+    private val errorHandler: ErrorHandler
 ) : BasePresenterImpl<UserDetailsView>() {
 
     private val executor: ExecutorService = Executors.newSingleThreadExecutor()
@@ -41,7 +43,7 @@ class UserDetailsPresenter(
                         if (response.isSuccessful) {
                             it.showUserDetails(response.body()!!)
                         } else {
-
+                            view?.showError(response.message())
                         }
                     }
                 }
@@ -49,6 +51,7 @@ class UserDetailsPresenter(
                 override fun onFailure(call: Call<UserDetails>, t: Throwable) {
                     if (!call.isCanceled) {
                         view?.showLoadingProgress(false)
+                        errorHandler.proceed(t) { view?.showError(it) }
                     }
                 }
             })

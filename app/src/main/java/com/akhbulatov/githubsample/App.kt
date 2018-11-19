@@ -8,12 +8,14 @@ import com.akhbulatov.githubsample.data.global.factories.DatabaseFactory
 import com.akhbulatov.githubsample.data.global.factories.NetworkFactory
 import com.akhbulatov.githubsample.data.global.factories.PrefsFactory
 import com.akhbulatov.githubsample.data.local.database.favorites.FavoritesDatabaseMapper
+import com.akhbulatov.githubsample.ui.global.ErrorHandler
 
 class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
         initDataManager()
+        errorHandler = ErrorHandler(this)
     }
 
     private fun initDataManager() {
@@ -27,5 +29,6 @@ class App : Application() {
 
     companion object {
         lateinit var dataManager: DataManager
+        lateinit var errorHandler: ErrorHandler
     }
 }

@@ -3,12 +3,15 @@ package com.akhbulatov.githubsample.ui.main.users
 import com.akhbulatov.githubsample.data.global.DataManager
 import com.akhbulatov.githubsample.models.User
 import com.akhbulatov.githubsample.ui.global.BasePresenterImpl
-
+import com.akhbulatov.githubsample.ui.global.ErrorHandler
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class UsersPresenter(private val dataManager: DataManager) : BasePresenterImpl<UsersView>() {
+class UsersPresenter(
+    private val dataManager: DataManager,
+    private val errorHandler: ErrorHandler
+) : BasePresenterImpl<UsersView>() {
 
     override fun attachView(view: UsersView) {
         super.attachView(view)
@@ -28,7 +31,7 @@ class UsersPresenter(private val dataManager: DataManager) : BasePresenterImpl<U
                         if (response.isSuccessful) {
                             it.showUsers(response.body()!!)
                         } else {
-
+                            view?.showError(response.message())
                         }
                     }
                 }
@@ -36,6 +39,7 @@ class UsersPresenter(private val dataManager: DataManager) : BasePresenterImpl<U
                 override fun onFailure(call: Call<List<User>>, t: Throwable) {
                     if (!call.isCanceled) {
                         view?.showLoadingProgress(false)
+                        errorHandler.proceed(t) { view?.showError(it) }
                     }
                 }
             })
