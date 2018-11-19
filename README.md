@@ -1,2 +1,2 @@
-# github-sample
-GitHub Sample App
+# arch-sample
+Arch Sample App
