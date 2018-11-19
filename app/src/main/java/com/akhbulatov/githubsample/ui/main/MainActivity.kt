@@ -28,9 +28,11 @@ class MainActivity : AppCompatActivity(), UsersFragment.UsersListener {
 
     override fun onFavoritesClick() = navigateToFavorites()
 
-    private fun navigateToUserDetails(user: User) =
+    private fun navigateToUserDetails(user: User) {
         startActivity(UserDetailsRootActivity.createIntent(this, user.login))
+    }
 
-    private fun navigateToFavorites() =
+    private fun navigateToFavorites() {
         startActivity(Intent(this, FavoritesRootActivity::class.java))
+    }
 }
