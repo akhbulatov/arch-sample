@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GitHubSample</string>
+    <string name="app_name">Arch Sample</string>
 
     <!-- Commons Messages -->
     <string name="msg_loading">Loading…</string>
