@@ -1,4 +1,4 @@
-package com.akhbulatov.archsample.di.global.main.favoritesroot.favorites
+package com.akhbulatov.archsample.di.main.favoritesroot.favorites
 
 import com.akhbulatov.archsample.data.global.DataManager
 import com.akhbulatov.archsample.ui.main.favoritesroot.favorites.FavoritesPresenter
