@@ -1,4 +1,4 @@
-package com.akhbulatov.archsample.di.global.main.userdetailsroot.userdetails
+package com.akhbulatov.archsample.di.main.userdetailsroot.userdetails
 
 import com.akhbulatov.archsample.data.global.DataManager
 import com.akhbulatov.archsample.ui.global.ErrorHandler

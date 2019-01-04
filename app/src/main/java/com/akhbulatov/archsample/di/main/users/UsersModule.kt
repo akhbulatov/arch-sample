@@ -1,15 +1,15 @@
-package com.akhbulatov.archsample.di.global.main.favoritesroot.favorites
+package com.akhbulatov.archsample.di.main.users
 
 import com.akhbulatov.archsample.data.global.DataManager
 import com.akhbulatov.archsample.ui.global.ErrorHandler
-import com.akhbulatov.archsample.ui.main.favoritesroot.favorites.FavoritesPresenter
+import com.akhbulatov.archsample.ui.main.users.UsersPresenter
 import dagger.Module
 import dagger.Provides
 
 @Module
-class FavoritesModule {
+class UsersModule {
     @Provides
-    @FavoritesScope
+    @UsersScope
     fun providePresenter(dataManager: DataManager, errorHandler: ErrorHandler) =
-        FavoritesPresenter(dataManager, errorHandler)
+        UsersPresenter(dataManager, errorHandler)
 }

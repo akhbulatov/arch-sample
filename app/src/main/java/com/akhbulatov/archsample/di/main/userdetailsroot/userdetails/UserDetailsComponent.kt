@@ -1,4 +1,4 @@
-package com.akhbulatov.archsample.di.global.main.userdetailsroot.userdetails
+package com.akhbulatov.archsample.di.main.userdetailsroot.userdetails
 
 import com.akhbulatov.archsample.ui.main.userdetailsroot.userdetails.UserDetailsFragment
 import dagger.BindsInstance
