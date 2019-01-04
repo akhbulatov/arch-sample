@@ -1,14 +1,14 @@
 package com.akhbulatov.archsample.di.global
 
 import android.content.Context
-import com.akhbulatov.archsample.di.global.main.MainComponent
-import com.akhbulatov.archsample.di.global.main.favorites.FavoritesComponent
-import com.akhbulatov.archsample.di.global.main.userdetails.UserDetailsComponent
-import com.akhbulatov.archsample.di.global.main.users.UsersComponent
 import com.akhbulatov.archsample.di.global.modules.DataModule
 import com.akhbulatov.archsample.di.global.modules.DatabaseModule
 import com.akhbulatov.archsample.di.global.modules.NavigationModule
 import com.akhbulatov.archsample.di.global.modules.NetworkModule
+import com.akhbulatov.archsample.di.main.MainComponent
+import com.akhbulatov.archsample.di.main.favorites.FavoritesComponent
+import com.akhbulatov.archsample.di.main.userdetails.UserDetailsComponent
+import com.akhbulatov.archsample.di.main.users.UsersComponent
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton

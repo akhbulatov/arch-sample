@@ -1,4 +1,4 @@
-package com.akhbulatov.archsample.di.global.main
+package com.akhbulatov.archsample.di.main
 
 import com.akhbulatov.archsample.ui.main.MainActivity
 import dagger.Subcomponent
