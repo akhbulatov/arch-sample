@@ -1,4 +1,4 @@
-package com.akhbulatov.archsample.di.global.main.userdetails
+package com.akhbulatov.archsample.di.main.userdetails
 
 import com.akhbulatov.archsample.domain.main.userdetails.UserDetailsInteractor
 import com.akhbulatov.archsample.presentation.mvp.global.ErrorHandler

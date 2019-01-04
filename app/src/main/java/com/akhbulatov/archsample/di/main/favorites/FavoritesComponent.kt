@@ -1,4 +1,4 @@
-package com.akhbulatov.archsample.di.global.main.favorites
+package com.akhbulatov.archsample.di.main.favorites
 
 import com.akhbulatov.archsample.presentation.ui.main.favorites.FavoritesFragment
 import dagger.Subcomponent

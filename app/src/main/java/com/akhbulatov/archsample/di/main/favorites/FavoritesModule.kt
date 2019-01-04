@@ -1,4 +1,4 @@
-package com.akhbulatov.archsample.di.global.main.favorites
+package com.akhbulatov.archsample.di.main.favorites
 
 import com.akhbulatov.archsample.domain.global.ResourceManager
 import com.akhbulatov.archsample.domain.main.favorites.FavoritesInteractor
