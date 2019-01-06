@@ -1,38 +1,26 @@
 package com.akhbulatov.archsample.presentation.ui.main.favorites
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.akhbulatov.archsample.App
 import com.akhbulatov.archsample.R
 import com.akhbulatov.archsample.domain.models.UserDetails
-import com.akhbulatov.archsample.presentation.mvp.main.favorites.FavoritesPresenter
-import com.akhbulatov.archsample.presentation.mvp.main.favorites.FavoritesView
-import com.akhbulatov.archsample.presentation.ui.global.BaseFragment
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.akhbulatov.archsample.presentation.global.BaseFragment
 import kotlinx.android.synthetic.main.fragment_favorites.*
 import kotlinx.android.synthetic.main.loading_error.*
 import kotlinx.android.synthetic.main.loading_progress.*
 import kotlinx.android.synthetic.main.toolbar.*
-import javax.inject.Inject
 
-class FavoritesFragment : BaseFragment(), FavoritesView {
-
-    @Inject
-    @InjectPresenter
-    lateinit var presenter: FavoritesPresenter
-
-    @ProvidePresenter
-    fun providePresenter() = presenter
+class FavoritesFragment : BaseFragment() {
+    lateinit var viewModel: FavoritesViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        App.appComponent.favoritesComponentBuilder()
-            .build()
-            .inject(this)
         super.onCreate(savedInstanceState)
+        viewModel = ViewModelProviders.of(this, viewModelFactory)[FavoritesViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -44,13 +32,14 @@ class FavoritesFragment : BaseFragment(), FavoritesView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
+        observeUiChanges()
     }
 
     private fun initViews() {
         toolbar.run {
             setTitle(R.string.favorites_title)
             setNavigationIcon(R.drawable.ic_arrow_back_white)
-            setNavigationOnClickListener { presenter.onBackPressed() }
+            setNavigationOnClickListener { viewModel.onBackPressed() }
         }
 
         favoritesRecyclerView.addItemDecoration(
@@ -58,19 +47,27 @@ class FavoritesFragment : BaseFragment(), FavoritesView {
         )
     }
 
-    override fun showFavorites(favorites: List<UserDetails>) {
+    private fun observeUiChanges() {
+        with(viewModel) {
+            favorites.observe(this@FavoritesFragment, Observer { showFavorites(it!!) })
+            loadingProgress.observe(this@FavoritesFragment, Observer { showLoadingProgress(it!!) })
+            loadingError.observe(this@FavoritesFragment, Observer { showError(it!!) })
+        }
+    }
+
+    private fun showFavorites(favorites: List<UserDetails>) {
         val adapter = FavoritesAdapter(favorites)
         favoritesRecyclerView.adapter = adapter
     }
 
-    override fun showLoadingProgress(show: Boolean) {
+    private fun showLoadingProgress(show: Boolean) {
         loadingProgressLayout.visibility = if (show) View.VISIBLE else View.GONE
     }
 
-    override fun showError(error: String) {
+    private fun showError(error: String) {
         loadingErrorTextView.text = error
         loadingErrorLayout.visibility = View.VISIBLE
     }
 
-    override fun onBackPressed() = presenter.onBackPressed()
+    override fun onBackPressed() = viewModel.onBackPressed()
 }

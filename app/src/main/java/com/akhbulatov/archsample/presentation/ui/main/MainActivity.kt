@@ -1,42 +1,31 @@
 package com.akhbulatov.archsample.presentation.ui.main
 
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import com.akhbulatov.archsample.App
 import com.akhbulatov.archsample.R
-import com.akhbulatov.archsample.presentation.mvp.main.MainPresenter
-import com.akhbulatov.archsample.presentation.mvp.main.MainView
-import com.akhbulatov.archsample.presentation.ui.global.BaseFragment
-import com.arellomobile.mvp.MvpAppCompatActivity
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.akhbulatov.archsample.presentation.global.BaseActivity
+import com.akhbulatov.archsample.presentation.global.BaseFragment
 import ru.terrakok.cicerone.Navigator
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.android.support.SupportAppNavigator
 import javax.inject.Inject
 
-class MainActivity : MvpAppCompatActivity(), MainView {
-
+class MainActivity : BaseActivity() {
     @Inject lateinit var navigatorHolder: NavigatorHolder
-
-    @Inject
-    @InjectPresenter
-    lateinit var presenter: MainPresenter
+    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private lateinit var navigator: Navigator
+    private lateinit var viewModel: MainViewModel
 
     private val currentFragment
         get() = supportFragmentManager.findFragmentById(R.id.container) as BaseFragment?
 
-    @ProvidePresenter
-    fun providePresenter() = presenter
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        App.appComponent.mainComponentBuilder()
-            .build()
-            .inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_container)
         navigator = SupportAppNavigator(this, R.id.container)
+        viewModel = ViewModelProviders.of(this, viewModelFactory)[MainViewModel::class.java]
     }
 
     override fun onResumeFragments() {
@@ -49,5 +38,5 @@ class MainActivity : MvpAppCompatActivity(), MainView {
         super.onPause()
     }
 
-    override fun onBackPressed() = currentFragment?.onBackPressed() ?: presenter.onBackPressed()
+    override fun onBackPressed() = currentFragment?.onBackPressed() ?: viewModel.onBackPressed()
 }

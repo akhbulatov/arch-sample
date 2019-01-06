@@ -1,24 +1,11 @@
 package com.akhbulatov.archsample
 
-import android.app.Application
-import com.akhbulatov.archsample.di.global.AppComponent
-import com.akhbulatov.archsample.di.global.DaggerAppComponent
-import com.arellomobile.mvp.MvpFacade
+import com.akhbulatov.archsample.di.DaggerAppComponent
+import dagger.android.AndroidInjector
+import dagger.android.DaggerApplication
 
-class App : Application() {
-
-    override fun onCreate() {
-        super.onCreate()
-        MvpFacade.init()
-        appComponent = buildAppComponent()
-    }
-
-    private fun buildAppComponent(): AppComponent =
-        DaggerAppComponent.builder()
-            .context(this)
-            .build()
-
-    companion object {
-        lateinit var appComponent: AppComponent
+class App : DaggerApplication() {
+    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
+        return DaggerAppComponent.builder().create(this)
     }
 }

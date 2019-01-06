@@ -1,46 +1,32 @@
 package com.akhbulatov.archsample.presentation.ui.main.userdetails
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.akhbulatov.archsample.App
 import com.akhbulatov.archsample.R
 import com.akhbulatov.archsample.domain.models.UserDetails
-import com.akhbulatov.archsample.presentation.mvp.main.userdetails.UserDetailsPresenter
-import com.akhbulatov.archsample.presentation.mvp.main.userdetails.UserDetailsView
-import com.akhbulatov.archsample.presentation.ui.global.BaseFragment
-import com.akhbulatov.archsample.presentation.ui.global.utils.showToast
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.akhbulatov.archsample.presentation.global.BaseFragment
+import com.akhbulatov.archsample.presentation.utils.showToast
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_user_details.*
 import kotlinx.android.synthetic.main.loading_error.*
 import kotlinx.android.synthetic.main.loading_progress.*
 import kotlinx.android.synthetic.main.toolbar.*
-import javax.inject.Inject
 
-class UserDetailsFragment : BaseFragment(), UserDetailsView {
-
-    @Inject
-    @InjectPresenter
-    lateinit var presenter: UserDetailsPresenter
-
+class UserDetailsFragment : BaseFragment() {
+    private lateinit var viewModel: UserDetailsViewModel
     private lateinit var login: String
-    private var userDetails: UserDetails? = null
 
-    @ProvidePresenter
-    fun providePresenter() = presenter
+    private var userDetails: UserDetails? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val args = arguments ?: throw IllegalArgumentException("Must pass user login argument.")
-        login = args.getString(ARGUMENT_LOGIN)
-
-        App.appComponent.userDetailsComponentBuilder()
-            .login(login)
-            .build()
-            .inject(this)
+        login = args.getString(ARGUMENT_LOGIN, "akhbulatov")
         super.onCreate(savedInstanceState)
+        viewModel = ViewModelProviders.of(this, viewModelFactory)[UserDetailsViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -52,18 +38,20 @@ class UserDetailsFragment : BaseFragment(), UserDetailsView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupToolbar()
+        viewModel.setLogin(login)
+        observeUiChanges()
     }
 
     private fun setupToolbar() {
         toolbar.run {
             title = login
             setNavigationIcon(R.drawable.ic_arrow_back_white)
-            setNavigationOnClickListener { presenter.onBackPressed() }
+            setNavigationOnClickListener { viewModel.onBackPressed() }
             inflateMenu(R.menu.user_details)
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.addToFavoritesMenu -> {
-                        userDetails?.let { presenter.onAddToFavoritesClicked(it) }
+                        userDetails?.let { viewModel.onAddToFavoritesClicked(it) }
                         true
                     }
 
@@ -73,11 +61,25 @@ class UserDetailsFragment : BaseFragment(), UserDetailsView {
         }
     }
 
-    override fun showContentLayout(show: Boolean) {
+    private fun observeUiChanges() {
+        with(viewModel) {
+            userDetails.observe(this@UserDetailsFragment, Observer { showUserDetails(it!!) })
+            showContentLayout.observe(
+                this@UserDetailsFragment,
+                Observer { showContentLayout(it!!) })
+            loadingProgress.observe(
+                this@UserDetailsFragment,
+                Observer { showLoadingProgress(it!!) })
+            loadingError.observe(this@UserDetailsFragment, Observer { showError(it!!) })
+            addedToFavorites.observe(this@UserDetailsFragment, Observer { showToFavoritesAdded() })
+        }
+    }
+
+    private fun showContentLayout(show: Boolean) {
         contentLayout.visibility = if (show) View.VISIBLE else View.GONE
     }
 
-    override fun showUserDetails(userDetails: UserDetails) {
+    private fun showUserDetails(userDetails: UserDetails) {
         this.userDetails = userDetails
 
         Picasso.get()
@@ -92,20 +94,20 @@ class UserDetailsFragment : BaseFragment(), UserDetailsView {
         followingValTextView.text = userDetails.following.toString()
     }
 
-    override fun showLoadingProgress(show: Boolean) {
+    private fun showLoadingProgress(show: Boolean) {
         loadingProgressLayout.visibility = if (show) View.VISIBLE else View.GONE
     }
 
-    override fun showError(error: String) {
+    private fun showError(error: String) {
         loadingErrorTextView.text = error
         loadingErrorLayout.visibility = View.VISIBLE
     }
 
-    override fun showToFavoritesAdded() {
+    private fun showToFavoritesAdded() {
         showToast(R.string.user_details_added_to_favorites)
     }
 
-    override fun onBackPressed() = presenter.onBackPressed()
+    override fun onBackPressed() = viewModel.onBackPressed()
 
     companion object {
         private const val ARGUMENT_LOGIN = "login"

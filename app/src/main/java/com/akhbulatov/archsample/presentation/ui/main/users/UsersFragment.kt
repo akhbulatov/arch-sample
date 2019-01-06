@@ -1,39 +1,27 @@
 package com.akhbulatov.archsample.presentation.ui.main.users
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.akhbulatov.archsample.App
 import com.akhbulatov.archsample.R
 import com.akhbulatov.archsample.domain.models.User
-import com.akhbulatov.archsample.presentation.mvp.main.users.UsersPresenter
-import com.akhbulatov.archsample.presentation.mvp.main.users.UsersView
-import com.akhbulatov.archsample.presentation.ui.global.BaseFragment
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.akhbulatov.archsample.presentation.global.BaseFragment
 import kotlinx.android.synthetic.main.fragment_users.*
 import kotlinx.android.synthetic.main.loading_error.*
 import kotlinx.android.synthetic.main.loading_progress.*
 import kotlinx.android.synthetic.main.toolbar.*
-import javax.inject.Inject
 
-class UsersFragment : BaseFragment(), UsersView {
-
-    @Inject
-    @InjectPresenter
-    lateinit var presenter: UsersPresenter
-
-    @ProvidePresenter
-    fun providePresenter() = presenter
+class UsersFragment : BaseFragment() {
+    private lateinit var viewModel: UsersViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        App.appComponent.usersComponentBuilder()
-            .build()
-            .inject(this)
         super.onCreate(savedInstanceState)
+        viewModel = ViewModelProviders.of(this, viewModelFactory)[UsersViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -45,6 +33,7 @@ class UsersFragment : BaseFragment(), UsersView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
+        observeUiChanges()
     }
 
     private fun initViews() {
@@ -57,6 +46,14 @@ class UsersFragment : BaseFragment(), UsersView {
         }
     }
 
+    private fun observeUiChanges() {
+        with(viewModel) {
+            users.observe(this@UsersFragment, Observer { showUsers(it!!) })
+            loadingProgress.observe(this@UsersFragment, Observer { showLoadingProgress(it!!) })
+            loadingError.observe(this@UsersFragment, Observer { showError(it!!) })
+        }
+    }
+
     private fun setupToolbar() {
         toolbar.run {
             setTitle(R.string.users_title)
@@ -64,7 +61,7 @@ class UsersFragment : BaseFragment(), UsersView {
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.favoritesMenu -> {
-                        presenter.onFavoritesClicked()
+                        viewModel.onFavoritesClicked()
                         true
                     }
 
@@ -74,20 +71,20 @@ class UsersFragment : BaseFragment(), UsersView {
         }
     }
 
-    override fun showUsers(users: List<User>) {
+    private fun showUsers(users: List<User>) {
         val adapter = UsersAdapter(users)
-        adapter.setOnUserClickListener { presenter.onUserClicked(it) }
+        adapter.setOnUserClickListener { viewModel.onUserClicked(it) }
         usersRecyclerView.adapter = adapter
     }
 
-    override fun showLoadingProgress(show: Boolean) {
+    private fun showLoadingProgress(show: Boolean) {
         loadingProgressLayout.visibility = if (show) View.VISIBLE else View.GONE
     }
 
-    override fun showError(error: String) {
+    private fun showError(error: String) {
         loadingErrorTextView.text = error
         loadingErrorLayout.visibility = View.VISIBLE
     }
 
-    override fun onBackPressed() = presenter.onBackPressed()
+    override fun onBackPressed() = viewModel.onBackPressed()
 }
