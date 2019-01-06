@@ -64,12 +64,8 @@ class UserDetailsFragment : BaseFragment() {
     private fun observeUiChanges() {
         with(viewModel) {
             userDetails.observe(this@UserDetailsFragment, Observer { showUserDetails(it!!) })
-            showContentLayout.observe(
-                this@UserDetailsFragment,
-                Observer { showContentLayout(it!!) })
-            loadingProgress.observe(
-                this@UserDetailsFragment,
-                Observer { showLoadingProgress(it!!) })
+            showContentLayout.observe(this@UserDetailsFragment, Observer { showContentLayout(it!!) })
+            loadingProgress.observe(this@UserDetailsFragment, Observer { showLoadingProgress(it!!) })
             loadingError.observe(this@UserDetailsFragment, Observer { showError(it!!) })
             addedToFavorites.observe(this@UserDetailsFragment, Observer { showToFavoritesAdded() })
         }
