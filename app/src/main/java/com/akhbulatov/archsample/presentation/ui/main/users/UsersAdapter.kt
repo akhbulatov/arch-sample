@@ -1,14 +1,12 @@
 package com.akhbulatov.archsample.presentation.ui.main.users
 
+import android.databinding.DataBindingUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import com.akhbulatov.archsample.R
+import com.akhbulatov.archsample.databinding.ItemUserBinding
 import com.akhbulatov.archsample.domain.models.User
-import com.squareup.picasso.Picasso
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.item_user.*
 
 private typealias OnUserClickListener = ((User) -> Unit)
 
@@ -18,10 +16,11 @@ class UsersAdapter(private val users: List<User>) :
     private var clickListener: OnUserClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
-        val itemView = LayoutInflater
-            .from(parent.context)
-            .inflate(R.layout.item_user, parent, false)
-        return UserViewHolder(itemView)
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = DataBindingUtil.inflate<ItemUserBinding>(
+            inflater, R.layout.item_user, parent, false
+        )
+        return UserViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) =
@@ -33,16 +32,14 @@ class UsersAdapter(private val users: List<User>) :
         clickListener = listener
     }
 
-    class UserViewHolder(override val containerView: View) :
-        RecyclerView.ViewHolder(containerView), LayoutContainer {
+    class UserViewHolder(private val binding: ItemUserBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(user: User, clickListener: OnUserClickListener?) {
-            Picasso.get()
-                .load(user.avatarUrl)
-                .placeholder(R.drawable.ic_account_circle_black)
-                .into(avatarImageView)
-            loginTextView.text = user.login
-
+            binding.run {
+                this.user = user
+                executePendingBindings()
+            }
             itemView.setOnClickListener { clickListener?.invoke(user) }
         }
     }

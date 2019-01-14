@@ -1,180 +1,205 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <include
-        android:id="@+id/userDetailsToolbar"
-        layout="@layout/toolbar" />
+    <data>
 
-    <ScrollView
-        android:id="@+id/contentLayout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/userDetailsToolbar"
-        tools:visibility="visible">
+        <import type="android.view.View" />
 
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <variable
+            name="viewModel"
+            type="com.akhbulatov.archsample.presentation.ui.main.userdetails.UserDetailsViewModel" />
+    </data>
 
-            <ImageView
-                android:id="@+id/avatarImageView"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:scaleType="centerCrop"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHeight_percent="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/img_no_image" />
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-            <!-- Login. Start -->
-            <TextView
-                android:id="@+id/loginTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/user_details_login"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/avatarImageView" />
+        <include
+            android:id="@+id/userDetailsToolbar"
+            layout="@layout/toolbar" />
 
-            <TextView
-                android:id="@+id/loginValTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintBaseline_toBaselineOf="@id/loginTextView"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/loginTextView"
-                tools:text="@tools:sample/lorem" />
-            <!-- Login. End -->
+        <ScrollView
+            android:id="@+id/contentLayout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/userDetailsToolbar"
+            app:visible="@{viewModel.showContentLayout}"
+            tools:visibility="visible">
 
-            <!-- Name. Start -->
-            <TextView
-                android:id="@+id/nameTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/user_details_name"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@id/loginTextView"
-                app:layout_constraintTop_toBottomOf="@id/loginValTextView" />
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/nameValTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                app:layout_constraintBaseline_toBaselineOf="@id/nameTextView"
-                app:layout_constraintEnd_toEndOf="@id/loginValTextView"
-                app:layout_constraintStart_toEndOf="@id/nameTextView"
-                tools:text="@tools:sample/lorem" />
-            <!-- Name. End -->
+                <ImageView
+                    android:id="@+id/avatarImageView"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:scaleType="centerCrop"
+                    app:imageUrl="@{viewModel.userDetails.avatarUrl}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHeight_percent="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:placeholder="@{@drawable/img_no_image}"
+                    tools:src="@drawable/img_no_image" />
 
-            <!-- Location. Start -->
-            <TextView
-                android:id="@+id/locationTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/user_details_location"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@id/loginTextView"
-                app:layout_constraintTop_toBottomOf="@id/nameValTextView" />
+                <!-- Login. Start -->
+                <TextView
+                    android:id="@+id/loginTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/user_details_login"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/avatarImageView" />
 
-            <TextView
-                android:id="@+id/locationValTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                app:layout_constraintBaseline_toBaselineOf="@id/locationTextView"
-                app:layout_constraintEnd_toEndOf="@id/loginValTextView"
-                app:layout_constraintStart_toEndOf="@id/locationTextView"
-                tools:text="@tools:sample/lorem" />
-            <!-- Location. End -->
+                <TextView
+                    android:id="@+id/loginValTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="@{viewModel.userDetails.login}"
+                    app:layout_constraintBaseline_toBaselineOf="@id/loginTextView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/loginTextView"
+                    tools:text="@tools:sample/lorem" />
+                <!-- Login. End -->
 
-            <!-- Public repos. Start -->
-            <TextView
-                android:id="@+id/publicReposTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/user_details_public_repos"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@id/loginTextView"
-                app:layout_constraintTop_toBottomOf="@id/locationValTextView" />
+                <!-- Name. Start -->
+                <TextView
+                    android:id="@+id/nameTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/user_details_name"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@id/loginTextView"
+                    app:layout_constraintTop_toBottomOf="@id/loginValTextView" />
 
-            <TextView
-                android:id="@+id/publicReposValTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                app:layout_constraintBaseline_toBaselineOf="@id/publicReposTextView"
-                app:layout_constraintEnd_toEndOf="@id/loginValTextView"
-                app:layout_constraintStart_toEndOf="@id/publicReposTextView"
-                tools:text="@tools:sample/lorem" />
-            <!-- Public repos. End -->
+                <TextView
+                    android:id="@+id/nameValTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="@{viewModel.userDetails.name}"
+                    app:layout_constraintBaseline_toBaselineOf="@id/nameTextView"
+                    app:layout_constraintEnd_toEndOf="@id/loginValTextView"
+                    app:layout_constraintStart_toEndOf="@id/nameTextView"
+                    tools:text="@tools:sample/lorem" />
+                <!-- Name. End -->
 
-            <!-- Followers. Start -->
-            <TextView
-                android:id="@+id/followersTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/user_details_followers"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@id/loginTextView"
-                app:layout_constraintTop_toBottomOf="@id/publicReposValTextView" />
+                <!-- Location. Start -->
+                <TextView
+                    android:id="@+id/locationTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/user_details_location"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@id/loginTextView"
+                    app:layout_constraintTop_toBottomOf="@id/nameValTextView" />
 
-            <TextView
-                android:id="@+id/followersValTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                app:layout_constraintBaseline_toBaselineOf="@id/followersTextView"
-                app:layout_constraintEnd_toEndOf="@id/loginValTextView"
-                app:layout_constraintStart_toEndOf="@id/followersTextView"
-                tools:text="@tools:sample/lorem" />
-            <!-- Followers. End -->
+                <TextView
+                    android:id="@+id/locationValTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="@{viewModel.userDetails.location}"
+                    app:layout_constraintBaseline_toBaselineOf="@id/locationTextView"
+                    app:layout_constraintEnd_toEndOf="@id/loginValTextView"
+                    app:layout_constraintStart_toEndOf="@id/locationTextView"
+                    tools:text="@tools:sample/lorem" />
+                <!-- Location. End -->
 
-            <!-- Following. Start -->
-            <TextView
-                android:id="@+id/followingTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/user_details_following"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@id/loginTextView"
-                app:layout_constraintTop_toBottomOf="@id/followersValTextView" />
+                <!-- Public repos. Start -->
+                <TextView
+                    android:id="@+id/publicReposTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/user_details_public_repos"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@id/loginTextView"
+                    app:layout_constraintTop_toBottomOf="@id/locationValTextView" />
 
-            <TextView
-                android:id="@+id/followingValTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                app:layout_constraintBaseline_toBaselineOf="@id/followingTextView"
-                app:layout_constraintEnd_toEndOf="@id/loginValTextView"
-                app:layout_constraintStart_toEndOf="@id/followingTextView"
-                tools:text="@tools:sample/lorem" />
-            <!-- Following. End -->
+                <TextView
+                    android:id="@+id/publicReposValTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="@{String.valueOf(viewModel.userDetails.publicRepos)}"
+                    app:layout_constraintBaseline_toBaselineOf="@id/publicReposTextView"
+                    app:layout_constraintEnd_toEndOf="@id/loginValTextView"
+                    app:layout_constraintStart_toEndOf="@id/publicReposTextView"
+                    tools:text="@tools:sample/lorem" />
+                <!-- Public repos. End -->
 
-        </android.support.constraint.ConstraintLayout>
+                <!-- Followers. Start -->
+                <TextView
+                    android:id="@+id/followersTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/user_details_followers"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@id/loginTextView"
+                    app:layout_constraintTop_toBottomOf="@id/publicReposValTextView" />
 
-    </ScrollView>
+                <TextView
+                    android:id="@+id/followersValTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="@{String.valueOf(viewModel.userDetails.followers)}"
+                    app:layout_constraintBaseline_toBaselineOf="@id/followersTextView"
+                    app:layout_constraintEnd_toEndOf="@id/loginValTextView"
+                    app:layout_constraintStart_toEndOf="@id/followersTextView"
+                    tools:text="@tools:sample/lorem" />
+                <!-- Followers. End -->
 
-    <include layout="@layout/loading_progress" />
+                <!-- Following. Start -->
+                <TextView
+                    android:id="@+id/followingTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/user_details_following"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@id/loginTextView"
+                    app:layout_constraintTop_toBottomOf="@id/followersValTextView" />
 
-    <include layout="@layout/loading_error" />
+                <TextView
+                    android:id="@+id/followingValTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="@{String.valueOf(viewModel.userDetails.following)}"
+                    app:layout_constraintBaseline_toBaselineOf="@id/followingTextView"
+                    app:layout_constraintEnd_toEndOf="@id/loginValTextView"
+                    app:layout_constraintStart_toEndOf="@id/followingTextView"
+                    tools:text="@tools:sample/lorem" />
+                <!-- Following. End -->
 
-</android.support.constraint.ConstraintLayout>
+            </android.support.constraint.ConstraintLayout>
+
+        </ScrollView>
+
+        <include
+            layout="@layout/loading_progress"
+            app:loadingProgress="@{viewModel.loadingProgress}" />
+
+        <include
+            layout="@layout/loading_error"
+            app:loadingError="@{viewModel.loadingError}" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</layout>

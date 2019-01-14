@@ -1,27 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <include
-        android:id="@+id/usersToolbar"
-        layout="@layout/toolbar" />
+    <data>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/usersRecyclerView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:clipToPadding="false"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/usersToolbar" />
+        <variable
+            name="viewModel"
+            type="com.akhbulatov.archsample.presentation.ui.main.users.UsersViewModel" />
+    </data>
 
-    <include layout="@layout/loading_progress" />
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <include layout="@layout/loading_error" />
+        <include
+            android:id="@+id/usersToolbar"
+            layout="@layout/toolbar" />
 
-</android.support.constraint.ConstraintLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/usersRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clipToPadding="false"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/usersToolbar" />
+
+        <include
+            layout="@layout/loading_progress"
+            app:loadingProgress="@{viewModel.loadingProgress}" />
+
+        <include
+            layout="@layout/loading_error"
+            app:loadingError="@{viewModel.loadingError}" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</layout>
