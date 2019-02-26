@@ -7,20 +7,19 @@ import com.akhbulatov.archsample.ui.global.BaseFragment
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import ru.terrakok.cicerone.Navigator
-import ru.terrakok.cicerone.NavigatorHolder
-import ru.terrakok.cicerone.android.support.SupportAppNavigator
+import me.aartikov.alligator.NavigationContext
+import me.aartikov.alligator.NavigationContextBinder
 import javax.inject.Inject
 
 class MainActivity : MvpAppCompatActivity(), MainView {
 
-    @Inject lateinit var navigatorHolder: NavigatorHolder
+    @Inject lateinit var navigationContextBinder: NavigationContextBinder
 
     @Inject
     @InjectPresenter
     lateinit var presenter: MainPresenter
 
-    private lateinit var navigator: Navigator
+    private lateinit var navigationContext: NavigationContext
 
     private val currentFragment
         get() = supportFragmentManager.findFragmentById(R.id.container) as BaseFragment?
@@ -34,16 +33,18 @@ class MainActivity : MvpAppCompatActivity(), MainView {
             .inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_container)
-        navigator = SupportAppNavigator(this, R.id.container)
+        navigationContext = NavigationContext.Builder(this)
+            .containerId(R.id.container)
+            .build()
     }
 
     override fun onResumeFragments() {
         super.onResumeFragments()
-        navigatorHolder.setNavigator(navigator)
+        navigationContextBinder.bind(navigationContext)
     }
 
     override fun onPause() {
-        navigatorHolder.removeNavigator()
+        navigationContextBinder.unbind()
         super.onPause()
     }
 

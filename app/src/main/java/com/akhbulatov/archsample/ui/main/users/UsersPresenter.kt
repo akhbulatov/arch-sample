@@ -7,14 +7,14 @@ import com.akhbulatov.archsample.ui.global.ErrorHandler
 import com.akhbulatov.archsample.ui.global.Screens
 import com.arellomobile.mvp.InjectViewState
 import io.reactivex.android.schedulers.AndroidSchedulers
-import ru.terrakok.cicerone.Router
+import me.aartikov.alligator.Navigator
 
 @InjectViewState
 class UsersPresenter(
-    private val router: Router,
+    private val navigator: Navigator,
     private val dataManager: DataManager,
     private val errorHandler: ErrorHandler
-) : BasePresenter<UsersView>(router) {
+) : BasePresenter<UsersView>(navigator) {
 
     override fun onFirstViewAttach() {
         loadUsers()
@@ -32,7 +32,7 @@ class UsersPresenter(
             .connect()
     }
 
-    fun onUserClicked(user: User) = router.navigateTo(Screens.UserDetails(user.login))
+    fun onUserClicked(user: User) = navigator.goForward(Screens.UserDetails(user.login))
 
-    fun onFavoritesClicked() = router.navigateTo(Screens.Favorites)
+    fun onFavoritesClicked() = navigator.goForward(Screens.Favorites)
 }

@@ -11,7 +11,7 @@ interface UserDetailsComponent {
 
     @Subcomponent.Builder
     interface Builder {
-        @BindsInstance fun login(login: String): Builder
+        @BindsInstance fun fragment(fragment: UserDetailsFragment): Builder
 
         fun build(): UserDetailsComponent
     }

@@ -8,6 +8,7 @@ import com.akhbulatov.archsample.App
 import com.akhbulatov.archsample.R
 import com.akhbulatov.archsample.models.UserDetails
 import com.akhbulatov.archsample.ui.global.BaseFragment
+import com.akhbulatov.archsample.ui.global.Screens
 import com.akhbulatov.archsample.ui.global.utils.showToast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -16,26 +17,24 @@ import kotlinx.android.synthetic.main.fragment_user_details.*
 import kotlinx.android.synthetic.main.loading_error.*
 import kotlinx.android.synthetic.main.loading_progress.*
 import kotlinx.android.synthetic.main.toolbar.*
+import me.aartikov.alligator.annotations.RegisterScreen
 import javax.inject.Inject
 
+@RegisterScreen(Screens.UserDetails::class)
 class UserDetailsFragment : BaseFragment(), UserDetailsView {
 
     @Inject
     @InjectPresenter
     lateinit var presenter: UserDetailsPresenter
 
-    private lateinit var login: String
     private var userDetails: UserDetails? = null
 
     @ProvidePresenter
     fun providePresenter() = presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val args = arguments ?: throw IllegalArgumentException("Must pass user login argument.")
-        login = args.getString(ARGUMENT_LOGIN)
-
         App.appComponent.userDetailsComponentBuilder()
-            .login(login)
+            .fragment(this)
             .build()
             .inject(this)
         super.onCreate(savedInstanceState)
@@ -54,7 +53,7 @@ class UserDetailsFragment : BaseFragment(), UserDetailsView {
 
     private fun setupToolbar() {
         toolbar.run {
-            title = login
+            title = presenter.login
             setNavigationIcon(R.drawable.ic_arrow_back_white)
             setNavigationOnClickListener { presenter.onBackPressed() }
             inflateMenu(R.menu.user_details)
@@ -104,13 +103,4 @@ class UserDetailsFragment : BaseFragment(), UserDetailsView {
     }
 
     override fun onBackPressed() = presenter.onBackPressed()
-
-    companion object {
-        private const val ARGUMENT_LOGIN = "login"
-
-        fun newInstance(login: String): UserDetailsFragment {
-            val args = Bundle().apply { putString(ARGUMENT_LOGIN, login) }
-            return UserDetailsFragment().apply { arguments = args }
-        }
-    }
 }

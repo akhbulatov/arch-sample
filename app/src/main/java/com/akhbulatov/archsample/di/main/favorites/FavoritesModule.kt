@@ -5,12 +5,15 @@ import com.akhbulatov.archsample.ui.global.ErrorHandler
 import com.akhbulatov.archsample.ui.main.favorites.FavoritesPresenter
 import dagger.Module
 import dagger.Provides
-import ru.terrakok.cicerone.Router
+import me.aartikov.alligator.Navigator
 
 @Module
 class FavoritesModule {
     @Provides
     @FavoritesScope
-    fun providePresenter(router: Router, dataManager: DataManager, errorHandler: ErrorHandler) =
-        FavoritesPresenter(router, dataManager, errorHandler)
+    fun providePresenter(
+        navigator: Navigator,
+        dataManager: DataManager,
+        errorHandler: ErrorHandler
+    ) = FavoritesPresenter(navigator, dataManager, errorHandler)
 }

@@ -5,14 +5,14 @@ import com.akhbulatov.archsample.ui.global.BasePresenter
 import com.akhbulatov.archsample.ui.global.ErrorHandler
 import com.arellomobile.mvp.InjectViewState
 import io.reactivex.android.schedulers.AndroidSchedulers
-import ru.terrakok.cicerone.Router
+import me.aartikov.alligator.Navigator
 
 @InjectViewState
 class FavoritesPresenter(
-    router: Router,
+    navigator: Navigator,
     private val dataManager: DataManager,
     private val errorHandler: ErrorHandler
-) : BasePresenter<FavoritesView>(router) {
+) : BasePresenter<FavoritesView>(navigator) {
 
     override fun onFirstViewAttach() {
         loadFavorites()

@@ -6,15 +6,15 @@ import com.akhbulatov.archsample.ui.global.BasePresenter
 import com.akhbulatov.archsample.ui.global.ErrorHandler
 import com.arellomobile.mvp.InjectViewState
 import io.reactivex.android.schedulers.AndroidSchedulers
-import ru.terrakok.cicerone.Router
+import me.aartikov.alligator.Navigator
 
 @InjectViewState
 class UserDetailsPresenter(
-    router: Router,
+    navigator: Navigator,
     private val dataManager: DataManager,
-    private val login: String,
+    val login: String,
     private val errorHandler: ErrorHandler
-) : BasePresenter<UserDetailsView>(router) {
+) : BasePresenter<UserDetailsView>(navigator) {
 
     override fun onFirstViewAttach() {
         loadUserDetails()

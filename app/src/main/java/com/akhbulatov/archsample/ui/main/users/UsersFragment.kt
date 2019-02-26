@@ -10,14 +10,17 @@ import com.akhbulatov.archsample.App
 import com.akhbulatov.archsample.R
 import com.akhbulatov.archsample.models.User
 import com.akhbulatov.archsample.ui.global.BaseFragment
+import com.akhbulatov.archsample.ui.global.Screens
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.fragment_users.*
 import kotlinx.android.synthetic.main.loading_error.*
 import kotlinx.android.synthetic.main.loading_progress.*
 import kotlinx.android.synthetic.main.toolbar.*
+import me.aartikov.alligator.annotations.RegisterScreen
 import javax.inject.Inject
 
+@RegisterScreen(Screens.Users::class)
 class UsersFragment : BaseFragment(), UsersView {
 
     @Inject

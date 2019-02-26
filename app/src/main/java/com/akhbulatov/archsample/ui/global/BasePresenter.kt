@@ -4,9 +4,9 @@ import com.arellomobile.mvp.MvpPresenter
 import com.arellomobile.mvp.MvpView
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import ru.terrakok.cicerone.Router
+import me.aartikov.alligator.Navigator
 
-abstract class BasePresenter<T : MvpView>(private val router: Router) : MvpPresenter<T>() {
+abstract class BasePresenter<T : MvpView>(private val navigator: Navigator) : MvpPresenter<T>() {
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -14,5 +14,5 @@ abstract class BasePresenter<T : MvpView>(private val router: Router) : MvpPrese
 
     protected fun Disposable.connect() = compositeDisposable.add(this)
 
-    open fun onBackPressed() = router.exit()
+    open fun onBackPressed() = navigator.goBack()
 }

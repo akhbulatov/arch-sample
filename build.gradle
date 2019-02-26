@@ -8,6 +8,7 @@ buildscript {
         roomVersion = '1.1.1'
         moxyVersion = '1.5.5'
         daggerVersion = '2.19'
+        alligatorVersion = '2.2.0'
     }
 
     repositories {
@@ -27,6 +28,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url 'https://jitpack.io' }
     }
 }
 

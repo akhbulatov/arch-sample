@@ -5,12 +5,15 @@ import com.akhbulatov.archsample.ui.global.ErrorHandler
 import com.akhbulatov.archsample.ui.main.users.UsersPresenter
 import dagger.Module
 import dagger.Provides
-import ru.terrakok.cicerone.Router
+import me.aartikov.alligator.Navigator
 
 @Module
 class UsersModule {
     @Provides
     @UsersScope
-    fun providePresenter(router: Router, dataManager: DataManager, errorHandler: ErrorHandler) =
-        UsersPresenter(router, dataManager, errorHandler)
+    fun providePresenter(
+        navigator: Navigator,
+        dataManager: DataManager,
+        errorHandler: ErrorHandler
+    ) = UsersPresenter(navigator, dataManager, errorHandler)
 }

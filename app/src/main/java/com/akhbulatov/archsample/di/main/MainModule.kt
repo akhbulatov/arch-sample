@@ -3,11 +3,11 @@ package com.akhbulatov.archsample.di.main
 import com.akhbulatov.archsample.ui.main.MainPresenter
 import dagger.Module
 import dagger.Provides
-import ru.terrakok.cicerone.Router
+import me.aartikov.alligator.Navigator
 
 @Module
 class MainModule {
     @Provides
     @MainScope
-    fun providePresenter(router: Router) = MainPresenter(router)
+    fun providePresenter(navigator: Navigator) = MainPresenter(navigator)
 }
