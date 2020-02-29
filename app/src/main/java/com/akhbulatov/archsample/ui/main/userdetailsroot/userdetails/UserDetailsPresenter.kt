@@ -10,9 +10,10 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import javax.inject.Inject
 
 @InjectViewState
-class UserDetailsPresenter(
+class UserDetailsPresenter @Inject constructor(
     private val dataManager: DataManager,
     private val login: String,
     private val errorHandler: ErrorHandler

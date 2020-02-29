@@ -8,9 +8,10 @@ import com.arellomobile.mvp.InjectViewState
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
 @InjectViewState
-class UsersPresenter(
+class UsersPresenter @Inject constructor(
     private val dataManager: DataManager,
     private val errorHandler: ErrorHandler
 ) : BasePresenter<UsersView>() {

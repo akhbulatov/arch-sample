@@ -4,40 +4,34 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.akhbulatov.archsample.App
 import com.akhbulatov.archsample.R
 import com.akhbulatov.archsample.models.UserDetails
 import com.akhbulatov.archsample.ui.global.utils.showToast
 import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_user_details.*
 import kotlinx.android.synthetic.main.loading_error.*
 import kotlinx.android.synthetic.main.loading_progress.*
 import kotlinx.android.synthetic.main.toolbar.*
-import javax.inject.Inject
 
 class UserDetailsFragment : MvpAppCompatFragment(), UserDetailsView {
 
-    @Inject
     @InjectPresenter
     lateinit var presenter: UserDetailsPresenter
 
     private lateinit var login: String
     private var userDetails: UserDetails? = null
 
-    @ProvidePresenter
-    fun providePresenter() = presenter
+//    @ProvidePresenter
+//    fun providePresenter(): UserDetailsPresenter {
+//        return UserDetailsPresenter()
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val args = arguments ?: throw IllegalArgumentException("Must pass user login argument.")
         login = args.getString(ARGUMENT_USER_LOGIN)
-
-        App.appComponent.userDetailsComponentBuilder()
-            .login(login)
-            .build()
-            .inject(this)
+        // TODO
         super.onCreate(savedInstanceState)
     }
 

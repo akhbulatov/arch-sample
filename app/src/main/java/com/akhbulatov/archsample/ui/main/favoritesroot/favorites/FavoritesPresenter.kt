@@ -7,9 +7,12 @@ import com.arellomobile.mvp.InjectViewState
 import java.util.concurrent.Callable
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import javax.inject.Inject
 
 @InjectViewState
-class FavoritesPresenter(dataManager: DataManager) : BasePresenter<FavoritesView>() {
+class FavoritesPresenter @Inject constructor(
+    dataManager: DataManager
+) : BasePresenter<FavoritesView>() {
 
     private val executor: ExecutorService = Executors.newSingleThreadExecutor()
     private val favoritesCallable: Callable<List<UserDetails>> =

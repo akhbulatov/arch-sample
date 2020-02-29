@@ -1,13 +1,10 @@
 package com.akhbulatov.archsample.di.main.favoritesroot.favorites
 
-import com.akhbulatov.archsample.data.global.DataManager
 import com.akhbulatov.archsample.ui.main.favoritesroot.favorites.FavoritesPresenter
-import dagger.Module
-import dagger.Provides
+import toothpick.config.Module
 
-@Module
-class FavoritesModule {
-    @Provides
-    @FavoritesScope
-    fun providePresenter(dataManager: DataManager) = FavoritesPresenter(dataManager)
+class FavoritesModule : Module() {
+    init {
+        bind(FavoritesPresenter::class.java)
+    }
 }

@@ -5,8 +5,9 @@ import android.support.v7.widget.DividerItemDecoration
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.akhbulatov.archsample.App
 import com.akhbulatov.archsample.R
+import com.akhbulatov.archsample.di.global.DI
+import com.akhbulatov.archsample.di.main.favoritesroot.favorites.FavoritesModule
 import com.akhbulatov.archsample.models.UserDetails
 import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -15,22 +16,18 @@ import kotlinx.android.synthetic.main.fragment_favorites.*
 import kotlinx.android.synthetic.main.loading_error.*
 import kotlinx.android.synthetic.main.loading_progress.*
 import kotlinx.android.synthetic.main.toolbar.*
-import javax.inject.Inject
+import toothpick.Toothpick
 
 class FavoritesFragment : MvpAppCompatFragment(), FavoritesView {
 
-    @Inject
     @InjectPresenter
     lateinit var presenter: FavoritesPresenter
 
     @ProvidePresenter
-    fun providePresenter() = presenter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        App.appComponent.favoritesComponentBuilder()
-            .build()
-            .inject(this)
-        super.onCreate(savedInstanceState)
+    fun providePresenter(): FavoritesPresenter {
+        val scope = Toothpick.openScopes(DI.APP_SCOPE, DI.FAVORITES_SCOPE)
+        scope.installModules(FavoritesModule())
+        return scope.getInstance(FavoritesPresenter::class.java)
     }
 
     override fun onCreateView(

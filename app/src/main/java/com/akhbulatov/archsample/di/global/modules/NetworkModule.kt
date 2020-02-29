@@ -1,50 +1,25 @@
 package com.akhbulatov.archsample.di.global.modules
 
-import com.akhbulatov.archsample.BuildConfig
 import com.akhbulatov.archsample.data.network.GitHubApi
-import dagger.Module
-import dagger.Provides
+import com.akhbulatov.archsample.di.global.providers.GitHubApiProvider
+import com.akhbulatov.archsample.di.global.providers.OkHttpClientProvider
+import com.akhbulatov.archsample.di.global.providers.RetrofitProvider
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
-import javax.inject.Singleton
+import toothpick.config.Module
 
-@Module
-class NetworkModule {
-    @Provides
-    @Singleton
-    fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor =
-        HttpLoggingInterceptor().apply {
-            level = if (BuildConfig.DEBUG) {
-                HttpLoggingInterceptor.Level.BODY
-            } else {
-                HttpLoggingInterceptor.Level.BASIC
-            }
-        }
+class NetworkModule : Module() {
+    init {
+        bind(OkHttpClient::class.java)
+            .toProvider(OkHttpClientProvider::class.java)
+            .providesSingletonInScope()
 
-    @Provides
-    @Singleton
-    fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient =
-        OkHttpClient.Builder()
-            .addInterceptor(loggingInterceptor)
-            .build()
+        bind(Retrofit::class.java)
+            .toProvider(RetrofitProvider::class.java)
+            .providesSingletonInScope()
 
-    @Provides
-    @Singleton
-    fun provideRetrofit(client: OkHttpClient): Retrofit =
-        Retrofit.Builder()
-            .baseUrl(BASE_API_URL)
-            .client(client)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-    @Provides
-    @Singleton
-    fun provideGitHubApi(retrofit: Retrofit): GitHubApi = retrofit.create()
-
-    companion object {
-        private const val BASE_API_URL = "https://api.github.com/"
+        bind(GitHubApi::class.java)
+            .toProvider(GitHubApiProvider::class.java)
+            .providesSingletonInScope()
     }
 }
